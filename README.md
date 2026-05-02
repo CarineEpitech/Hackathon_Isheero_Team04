@@ -32,7 +32,7 @@ Analyser la couverture médiatique du Bénin (janv 2025 - dec 2025) via la base 
 
 \## Stack technique
 
-\*Python 
+\*Python
 
 \*BigQuery
 
@@ -48,7 +48,31 @@ Analyser la couverture médiatique du Bénin (janv 2025 - dec 2025) via la base 
 
 pip install -r requirements.txt
 
-python dashboard/app.py
+python pipeline.py
+
+
+
+\### Fichiers générés
+
+| Fichier                                | Description                  |
+
+|----------------------------------------|------------------------------|
+
+| `data/processed/benin\_clean.csv`       | Données nettoyées            |
+
+| `data/processed/benin\_enrichi.csv`     | Données + colonnes calculées |
+
+| `data/processed/benin\_enrichi.parquet` | Format compressé rapide      |
+
+
+
+\### Qualité des données
+
+\- Période couverte : 2025-01-01 → 2025-12-31
+
+\- Colonnes critiques vérifiées par assertions automatiques
+
+\- Doublons supprimés, types corrigés, dates validées
 
 
 

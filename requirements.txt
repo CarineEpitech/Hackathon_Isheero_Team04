@@ -1,34 +1,49 @@
+# =========================
 # Data Engineering & Pipeline
-pandas==2.2.0
-polars==0.20.0
-google-cloud-bigquery==3.17.0
-db-dtypes==1.2.0
-pyarrow==15.0.0          # Lecture/écriture Parquet (stockage compressé)
+# =========================
+pandas==2.2.0              # Manipulation et analyse de données tabulaires (DataFrame)
+polars==0.20.0             # Alternative rapide à pandas pour le traitement de données volumineuses
+google-cloud-bigquery==3.17.0  # Connexion et requêtes vers BigQuery (Google Cloud)
+db-dtypes==1.2.0           # Types de données compatibles BigQuery pour pandas
+pyarrow==15.0.0            # Lecture/écriture de fichiers Parquet (stockage compressé et rapide)
 
+# =========================
 # Visualisation
-matplotlib==3.8.0
-seaborn==0.13.0
-plotly==5.19.0
-folium==0.15.0           # Cartes géographiques interactives (lat/long dispo dans GDELT)
+# =========================
+matplotlib==3.8.0          # Création de graphiques statiques (courbes, histogrammes, etc.)
+seaborn==0.13.0            # Visualisation statistique basée sur matplotlib (plus esthétique)
+plotly==5.19.0             # Graphiques interactifs (dashboards, zoom, hover)
+folium==0.15.0             # Cartes géographiques interactives (utilise Leaflet + coordonnées GPS)
 
+# =========================
 # Machine Learning
-scikit-learn==1.4.0
-numpy==1.26.0
+# =========================
+scikit-learn==1.4.0       # Algorithmes de machine learning (classification, régression, clustering)
+numpy==1.26.0             # Calcul scientifique et manipulation de tableaux multidimensionnels
 
-# NLP / Sentiment
-textblob==0.18.0
-transformers==4.38.0     # HuggingFace (si connexion OK)
-torch==2.2.0             # Requis par HuggingFace
+# =========================
+# NLP / Sentiment Analysis
+# =========================
+textblob==0.18.0          # Analyse de sentiment et traitement simple du langage naturel
+transformers==4.38.0      # Modèles NLP avancés pré-entraînés (Hugging Face)
+torch==2.2.0              # Backend des modèles deep learning (PyTorch)
 
+# =========================
 # Dashboard
-streamlit==1.31.0
-streamlit-folium==0.18.0 # Pour intégrer les cartes Folium dans Streamlit
+# =========================
+streamlit==1.31.0         # Création rapide d’applications web interactives pour data science
+streamlit-folium==0.18.0  # Intégration de cartes Folium dans Streamlit
 
+# =========================
 # Qualité des données & profiling
-pandas-profiling==4.0.0  # Rapport qualité automatique (ou ydata-profiling)
+# =========================
+pandas-profiling==4.0.0   # Génération automatique de rapports d’analyse de données
+# (alternative moderne : ydata-profiling)
 
+# =========================
 # Utilitaires
-python-dotenv==1.0.0     # Gérer les credentials BigQuery proprement
-tqdm==4.66.0             # Barres de progression dans le pipeline
-jupyter==1.0.0
-ipykernel==6.29.0
+# =========================
+python-dotenv==1.0.0      # Gestion des variables d’environnement (.env, secrets)
+tqdm==4.66.0              # Affichage de barres de progression pour boucles Python
+jupyter==1.0.0            # Environnement de notebooks interactifs
+ipykernel==6.29.0         # Permet d’exécuter Python dans Jupyter Notebook
