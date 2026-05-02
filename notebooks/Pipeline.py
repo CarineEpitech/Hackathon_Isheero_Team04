@@ -137,7 +137,7 @@ def run_pipeline(input_path=None, output_dir=None):
     # ════════════════════════════════════════════════════
     # ÉTAPE 4 : NETTOYAGE
     # ════════════════════════════════════════════════════
-    print("\n🧹 Nettoyage des données...")
+    print("\n Nettoyage des données...")
 
     nb_avant = len(df)
     df = df.drop_duplicates(subset=['GLOBALEVENTID'])
@@ -372,10 +372,10 @@ def run_pipeline(input_path=None, output_dir=None):
             pct = (n / len(df) * 100).round(1)
             print(f"   {col:<25} : {n:,} ({pct}%)")
 
-    print(f"\n🎭 Ton médiatique :")
+    print(f"\n Ton médiatique :")
     print(df['ton_categorie'].value_counts().to_string())
 
-    print(f"\n⚖️  Goldstein :")
+    print(f"\n  Goldstein :")
     print(df['goldstein_categorie'].value_counts().to_string())
 
     if 'zone_benin' in df.columns:
