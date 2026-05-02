@@ -224,26 +224,27 @@ def run_pipeline(input_path=None, output_dir=None):
         # Remplacer les codes 1/2/3/4 par des labels lisibles
 
     # ── Classification zone géographique ─────────────
-    departements_nord = [
-        # Alibori
-        "Banikoara", "Gogounou", "Kandi", "Karimama", "Malanville", "Segbana",
-        # Atacora
-        "Boukoumbé", "Cobly", "Kérou", "Kouandé", "Matéri", "Natitingou",
-        "Péhunco", "Tanguiéta", "Toucountouna",
-        # Donga
-        "Bassila", "Copargo", "Djougou", "Ouaké",
-        # Borgou
-        "Bembèrèkè", "Kalalé", "N'Dali", "Nikki", "Parakou",
-        "Pèrèrè", "Sinendé", "Tchaourou"
-    ]
-    # Départements du nord — zone exposée aux pressions jihadistes (Q3)
+    
+    departements_nord = [# Alibori
+    "Banikoara", "Gogounou", "Kandi", "Karimama", "Malanville", "Segbana", "Alassane", "Gbeke", "Alibori", "Kantoro", "Mehrou", "Toura"
+
+    # Atacora
+    "Boukoumbé", "Cobly", "Kerou", "Kouandé", "Matéri", "Natitingou", "Péhunco", "Tanguieta", "Toucountouna", "Akoko", "Kayode", "Atakora", "Porga", "Taiakou", "Tanougou", "Tobre"
+
+    # Donga
+    "Bassila", "Copargo", "Djougou", "Ouaké", "Donga"
+
+    # Borgou
+    "Bembereke", "Kalale", "Ndali", "Nikki", "Parakou", "Pèrèrè", "Sinendé", "Tchaourou", "Babariba", "Bouca", "Gokana", "Gourou", "Kika" "Borgou", "Sekere"]
+    # BN01=Alibori · BN02=Atacora · BN06=Borgou — zone exposée jihadiste
 
     departements_centre = [
-        # Zou
-        "Abomey", "Agbangnizoun", "Bohicon", "Cové", "Djidja",
-        "Ouinhi", "Za-Kpota", "Zagnanado", "Zogbodomey",
-        # Collines
-        "Bantè", "Dassa-Zoumè", "Glazoué", "Ouèssè", "Savalou", "Savè"
+    # Zou
+    "Abomey", "Agbangnizoun", "Bohicon", "Cové", "Djidja",
+    "Ouinhi", "Kpota", "Zagnanado", "Zogbodomey", "Dosso", "Zou"
+
+    # Collines
+    "Bantè", "Dassa-Zoume", "Glazoue", "Ouèssè", "Savalou", "Savè", "Alafia", "Kokou", "Collines", "Ogou", "Okio"
     ]
     # Départements du centre — Zou et Collines
 
