@@ -82,7 +82,8 @@ benin-insights-challenge/
 | **Source**              | [GDELT Project](https://gdeltproject.org) via Google BigQuery |
 | **Table**               | `gdelt-bq.gdeltv2.events`                                     |
 | **Filtre géographique** | `ActionGeo_CountryCode = 'BN'`                                |
-| **Filtre acteurs**      | `Actor1CountryCode = 'BEN'` OR `Actor2CountryCode = 'BEN'`    |
+| **Filtre acteurs**      |(Actor1CountryCode = 'BEN' OR Actor2CountryCode = 'BEN') AND        
+                            LOWER(ActionGeo_FullName) LIKE '%benin%'                      |
 | **Période**             | 1er Janvier 2025 → 31 Decembre 2025                           |
 | **Volume**              | ~10 722 événements · 31 colonnes                              |
 
@@ -135,7 +136,7 @@ streamlit run app/streamlit_app.py
 
 ##  Qualité des données
 
-- Période couverte : 0125 → 202--30
+- Période couverte : 01-01-2025 → 31-12-2025
 - 31 colonnes critiques extraites et documentées
 - Assertions automatiques à chaque exécution du pipeline
 - Doublons supprimés sur `GLOBALEVENTID`
@@ -145,31 +146,11 @@ streamlit run app/streamlit_app.py
 
 ---
 
-## 🤖 Usage de l'IA
+##  Usage de l'IA
 
 Conformément aux règles du hackathon iSHEERO 2026 :
 - **Claude (Anthropic)** — génération et debug du pipeline · structuration du code
-- **GitHub Copilot** — autocomplétion lors du développement
 
 Tout le code a été relu, compris et validé par l'équipe.
-
+Cependant il y a des modifications du code genere par Claude qui ont été effectuer dans le but au contexte reel du projet 
 ---
-
-## 📬 Contact & Support
-
-- 📧 formations@isheero.com
-- 🌐 [isheero.com](https://isheero.com)
-
----
-
-*Bénin Insights Challenge · iSHEERO × DataCamp Donates · 2026*
-```
-
----
-
-Deux choses à compléter avant de pusher :
-
-1. **L'URL du dashboard** Streamlit Cloud une fois déployé par le DA
-2. **Le lien Google Drive** des données brutes
-
-Le reste est prêt à pusher. 💪
