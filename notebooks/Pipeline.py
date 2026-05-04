@@ -1,6 +1,5 @@
-# pipeline.py
+# pipeline.py: extraction, nettoyage, enrichissement et sauvegarde en une seule commeande
 # Usage : python pipeline.py
-# Ce script extrait, nettoie et enrichit les données GDELT du Bénin en une seule commande
 
 import pandas as pd          # Manipulation des données
 import numpy as np           # Calculs numériques
@@ -22,7 +21,7 @@ def run_pipeline(input_path=None, output_dir=None):
         # Dossier de sortie pour les fichiers nettoyés
 
     print("=" * 55)
-    print("🇧🇯 PIPELINE GDELT — BÉNIN INSIGHTS CHALLENGE")
+    print("PIPELINE GDELT — BÉNIN INSIGHTS CHALLENGE")
     print("=" * 55)
     print(f" Source      : {input_path}")
     print(f" Destination : {output_dir}")
@@ -225,7 +224,7 @@ def run_pipeline(input_path=None, output_dir=None):
 
     # ── Classification zone géographique ─────────────
     
-    departements_nord = [# Alibori
+    communesdepart_nord = [# Alibori
     "Banikoara", "Gogounou", "Kandi", "Karimama", "Malanville", "Segbana", "Alassane", "Gbeke", "Alibori", "Kantoro", "Mehrou", "Toura"
 
     # Atacora
@@ -238,7 +237,7 @@ def run_pipeline(input_path=None, output_dir=None):
     "Bembereke", "Kalale", "Ndali", "Nikki", "Parakou", "Pèrèrè", "Sinendé", "Tchaourou", "Babariba", "Bouca", "Gokana", "Gourou", "Kika" "Borgou", "Sekere"]
     # BN01=Alibori · BN02=Atacora · BN06=Borgou — zone exposée jihadiste
 
-    departements_centre = [
+    communesdepart_centre = [
     # Zou
     "Abomey", "Agbangnizoun", "Bohicon", "Cové", "Djidja",
     "Ouinhi", "Kpota", "Zagnanado", "Zogbodomey", "Dosso", "Zou"
@@ -260,11 +259,11 @@ def run_pipeline(input_path=None, output_dir=None):
         # Convertir en minuscules pour ignorer la casse
         # Ex : "KANDI, BENIN" → "kandi, benin"
 
-        if any(ville.lower() in nom_lieu_str for ville in departements_nord):
+        if any(ville.lower() in nom_lieu_str for ville in communesdepart_nord):
             return 'nord'
             # Ex : "Kandi, Alibori, Benin" contient "kandi" → nord
 
-        elif any(ville.lower() in nom_lieu_str for ville in departements_centre):
+        elif any(ville.lower() in nom_lieu_str for ville in communesdepart_centre):
             return 'centre'
             # Ex : "Bohicon, Zou, Benin" contient "bohicon" → centre
 
@@ -386,9 +385,8 @@ def run_pipeline(input_path=None, output_dir=None):
         print(f"\n  QuadClass :")
         print(df['quadclass_label'].value_counts().to_string())
 
-    print("=" * 55)
-    print(" Pipeline terminé avec succès !")
-    print("=" * 55)
+ 
+
 
     return df
     # Retourner le DataFrame pour pouvoir l'utiliser dans d'autres scripts
