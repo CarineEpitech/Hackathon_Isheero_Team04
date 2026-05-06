@@ -403,7 +403,7 @@ else:
     if n_total > MAP_MAX_POINTS:
         df_geo = df_geo.sample(MAP_MAX_POINTS, random_state=42)
 
-    df_geo["Zone"]   = df_geo["zone_benin"].map(LABELS_ZONES).fillna("Inconnu")
+    df_geo["Zone"]   = df_geo["zone_benin"].map(LABELS_ZONES).fillna("Inconnu") if "zone_benin" in df_geo.columns else "Inconnu"
     df_geo["Taille"] = (df_geo["NumMentions"].clip(upper=100).fillna(5) / 10 + 4).round(1)
     df_geo["Lieu"]   = df_geo["ActionGeo_FullName"].fillna("Localisation inconnue")
 
