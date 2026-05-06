@@ -1,0 +1,31 @@
+# =========================
+# Core
+# =========================
+streamlit
+pandas
+numpy
+pyarrow
+
+# =========================
+# Visualisation
+# =========================
+plotly
+matplotlib
+seaborn
+
+# =========================
+# Machine Learning
+# =========================
+scikit-learn
+joblib
+
+# =========================
+# Cartographie (si utilisée)
+# =========================
+folium
+streamlit-folium
+
+# =========================
+# Utilitaires
+# =========================
+python-dotenv
