@@ -135,11 +135,18 @@ MAP_MAX_POINTS = 2000
 def charger_donnees():
     chemin_parquet = ROOT_DIR / "data/processed/benin_enrichi.parquet"
     chemin_csv     = ROOT_DIR / "data/processed/benin_enrichi.csv"
+    df = None
     if chemin_parquet.exists():
-        df = pd.read_parquet(chemin_parquet)
-    elif chemin_csv.exists():
-        df = pd.read_csv(chemin_csv)
-    else:
+        try:
+            df = pd.read_parquet(chemin_parquet)
+        except Exception:
+            df = None
+    if df is None and chemin_csv.exists():
+        try:
+            df = pd.read_csv(chemin_csv, low_memory=False)
+        except Exception:
+            return None
+    if df is None:
         return None
     df["SQLDATE"] = pd.to_datetime(df["SQLDATE"], errors="coerce")
     return df
@@ -209,7 +216,7 @@ st.divider()
 
 st.sidebar.header("Filtres thématiques")
 
-tons = sorted(df["ton_categorie"].dropna().unique().tolist())
+tons = sorted(df["ton_categorie"].dropna().unique().tolist()) if "ton_categorie" in df.columns else []
 ton_sel = st.sidebar.multiselect(
     "Ton médiatique",
     options=tons,
@@ -217,7 +224,7 @@ ton_sel = st.sidebar.multiselect(
     default=tons,
 )
 
-quadclasses = sorted(df["quadclass_label"].dropna().unique().tolist())
+quadclasses = sorted(df["quadclass_label"].dropna().unique().tolist()) if "quadclass_label" in df.columns else []
 quad_sel = st.sidebar.multiselect(
     "Type d'événement",
     options=quadclasses,
@@ -240,10 +247,12 @@ else:
         d_end   = pd.Timestamp(DATE_MAX)
     df_date = df[(df["SQLDATE"] >= d_start) & (df["SQLDATE"] <= d_end)]
 
-df_filtre = df_date[
-    df_date["ton_categorie"].isin(ton_sel)
-    & df_date["quadclass_label"].isin(quad_sel)
-]
+mask = pd.Series(True, index=df_date.index)
+if "ton_categorie" in df_date.columns and ton_sel:
+    mask &= df_date["ton_categorie"].isin(ton_sel)
+if "quadclass_label" in df_date.columns and quad_sel:
+    mask &= df_date["quadclass_label"].isin(quad_sel)
+df_filtre = df_date[mask]
 
 vide = len(df_filtre) == 0
 
@@ -275,7 +284,7 @@ st.subheader("Évolution temporelle")
 col_ton, col_gold = st.columns(2)
 
 with col_ton:
-    if not vide:
+    if not vide and "mois_annee" in df_filtre.columns:
         tone_mensuel = (
             df_filtre.groupby("mois_annee")["AvgTone"]
             .mean().reset_index().sort_values("mois_annee")
@@ -291,7 +300,7 @@ with col_ton:
         st.info("Aucune donnée pour les filtres sélectionnés.")
 
 with col_gold:
-    if not vide:
+    if not vide and "mois_annee" in df_filtre.columns:
         gold_mensuel = (
             df_filtre.groupby("mois_annee")["GoldsteinScale"]
             .mean().reset_index().sort_values("mois_annee")
@@ -398,8 +407,11 @@ else:
     df_geo["Taille"] = (df_geo["NumMentions"].clip(upper=100).fillna(5) / 10 + 4).round(1)
     df_geo["Lieu"]   = df_geo["ActionGeo_FullName"].fillna("Localisation inconnue")
 
-    fig_map = px.scatter_mapbox(
-        df_geo,
+    _map_title = (
+        f"Localisation des événements — {len(df_geo):,} points"
+        + (f" (échantillon sur {n_total:,})" if n_total > MAP_MAX_POINTS else "")
+    )
+    _map_kwargs = dict(
         lat="ActionGeo_Lat",
         lon="ActionGeo_Long",
         color="AvgTone",
@@ -418,13 +430,40 @@ else:
         },
         zoom=5.5,
         center={"lat": 9.3, "lon": 2.3},
-        mapbox_style="carto-positron",
-        title=(
-            f"Localisation des événements — {len(df_geo):,} points"
-            + (f" (échantillon sur {n_total:,})" if n_total > MAP_MAX_POINTS else "")
-        ),
+        title=_map_title,
         labels={"AvgTone": "Ton"},
     )
+    fig_map = None
+    # Plotly 5.24+ / 6.x : px.scatter_map (pas de token nécessaire)
+    if hasattr(px, "scatter_map"):
+        try:
+            fig_map = px.scatter_map(df_geo, map_style="carto-positron", **_map_kwargs)
+        except Exception:
+            fig_map = None
+    # Plotly 5.x : px.scatter_mapbox avec tuiles libres
+    if fig_map is None:
+        try:
+            fig_map = px.scatter_mapbox(df_geo, mapbox_style="open-street-map", **_map_kwargs)
+        except Exception:
+            fig_map = None
+    # Fallback universel : carte géographique sans tuiles
+    if fig_map is None:
+        fig_map = px.scatter_geo(
+            df_geo,
+            lat="ActionGeo_Lat",
+            lon="ActionGeo_Long",
+            color="AvgTone",
+            color_continuous_scale="RdYlGn",
+            color_continuous_midpoint=0,
+            range_color=[-6, 6],
+            size="Taille",
+            size_max=14,
+            hover_name="Lieu",
+            title=_map_title,
+            labels={"AvgTone": "Ton"},
+            scope="africa",
+            fitbounds="locations",
+        )
     fig_map.update_layout(height=520, margin={"r": 0, "l": 0, "t": 40, "b": 0})
     st.plotly_chart(fig_map, use_container_width=True)
     st.caption(
@@ -495,7 +534,7 @@ st.divider()
 
 st.subheader("Géographie interne — nord, centre, sud")
 
-if not vide:
+if not vide and "zone_benin" in df_filtre.columns:
     zones = (
         df_filtre.groupby("zone_benin")
         .agg(
