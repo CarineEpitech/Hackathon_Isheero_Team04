@@ -3,10 +3,10 @@
 ## Hackathon iSHEERO × DataCamp 2026 · Phase 1 · 27 avril → 5 mai 2026
 
 **Source de données principale :** GDELT Project (Global Database of Events, Language and Tone)  
-**Périmètre géographique :** Bénin (`ActionGeo\_CountryCode = 'BC'`)  
+**Périmètre géographique :** Bénin (`ActionGeo_CountryCode = 'BN'`)  
 **Période d'analyse :** 2025
 
-\---
+---
 
 ## Introduction
 
@@ -14,7 +14,7 @@ Le présent document formalise les **5 questions analytiques prioritaires** rete
 
 Chaque question est documentée selon une structure commune : **formulation**, **justification stratégique**, **indicateurs GDELT mobilisables**, **méthodes d'analyse associées**, et **visualisations cibles**.
 
-\---
+---
 
 ## Question 1 — Évolution et biais de l'image médiatique internationale du Bénin
 
@@ -50,7 +50,7 @@ Cette question fusionne deux axes analytiques complémentaires : l'**évolution 
 * Carte choroplèthe : intensité et tonalité de la couverture par pays source
 * Boîte à moustaches (boxplot) par espace médiatique pour comparer la dispersion du ton
 
-\---
+---
 
 ## Question 2 — Narratifs dominants et leur évolution
 
@@ -86,7 +86,7 @@ Identifier les narratifs récurrents permet de dépasser la simple mesure quanti
 * Diagramme de flux (Sankey) : narratifs → tonalité → espace médiatique
 * Graphique linéaire multi-séries : évolution mensuelle des 3–5 narratifs dominants
 
-\---
+---
 
 ## Question 3 — Influence des événements sécuritaires du nord sur l'image globale
 
@@ -102,8 +102,8 @@ Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en pro
 
 |Indicateur GDELT|Rôle analytique|
 |-|-|
-|`ActionGeo\_ADM1Code`|Code de la région administrative → filtrer le nord (Alibori, Atacora)|
-|`ActionGeo\_Lat` / `ActionGeo\_Long`|Géolocalisation précise des événements|
+|`ActionGeo_ADM1Code`|Code de la région administrative → filtrer le nord (Alibori, Atacora)|
+|`ActionGeo_Lat` / `ActionGeo_Long`|Géolocalisation précise des événements|
 |`EventCode`|Codes CAMEO liés à la violence : 18x (Assault), 19x (Fight), 20x (Use unconventional mass violence)|
 |`GoldsteinScale`|Mesure de l'impact déstabilisateur de l'événement|
 |`AvgTone`|Tonalité de la couverture associée à ces événements|
@@ -111,7 +111,7 @@ Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en pro
 
 ### Méthodes d'analyse
 
-* **Filtre géographique** : isolation des événements dans les départements du nord (`ActionGeo\_ADM1Code` correspondant à Alibori / Atacora / Borgou)
+* **Filtre géographique** : isolation des événements dans les départements du nord (`ActionGeo_ADM1Code` correspondant à Alibori / Atacora / Borgou)
 * **Analyse de corrélation temporelle** : corrélation (Pearson ou Spearman) entre pic d'événements sécuritaires au nord et variation de `AvgTone` national
 * **Test de causalité de Granger** (si données suffisantes) : les événements sécuritaires précèdent-ils statistiquement la dégradation de l'image ?
 * **Comparaison régionale** : `AvgTone` nord vs reste du pays
@@ -122,7 +122,7 @@ Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en pro
 * Graphique de corrélation : axe X = nombre d'incidents sécuritaires au nord, axe Y = `AvgTone` moyen national
 * Timeline double : incidents sécuritaires (barres) + tonalité globale (ligne) superposés
 
-\---
+---
 
 ## Question 4 — Détection de signaux faibles et pics médiatiques précurseurs
 
@@ -158,7 +158,7 @@ Cette question introduit une **dimension prédictive et d'alerte précoce** qui 
 * Graphique de chaleur (heatmap) : intensité des signaux par semaine et par type d'indicateur
 * Dashboard interactif : slider temporel permettant de naviguer et d'inspecter les pics (Streamlit)
 
-\---
+---
 
 ## Question 5 — Événements et périodes les plus marquants pour le Bénin
 
@@ -194,7 +194,7 @@ Cette question joue un rôle de **storytelling final** : elle synthétise l'ense
 * Bar chart horizontal : top 10 événements par volume de mentions avec code couleur par `QuadClass`
 * Tableau récapitulatif des 5 périodes marquantes : date, nature de l'événement, tonalité, volume, espace médiatique dominant
 
-\---
+---
 
 ## Synthèse — Matrice de correspondance des questions
 
@@ -206,26 +206,26 @@ Cette question joue un rôle de **storytelling final** : elle synthétise l'ense
 |Q4|Signaux faibles et pics précurseurs|Prédictive + anomalie|Valeur ajoutée ML — différenciation technique|
 |Q5|Événements et périodes marquants|Synthétique + narrative|Storytelling final — pitch et résumé|
 
-\---
+---
 
 ## Dépendances et calendrier
 
 |Jour|Action clé liée à ces questions|
 |-|-|
 |J1|✅ Ce document — questions validées en équipe|
-|J2|Data Engineer livre `benin\_clean.csv` → Data Analyst commence EDA sur Q1 et Q5|
+|J2|Data Engineer livre `benin_clean.csv` → Data Analyst commence EDA sur Q1 et Q5|
 |J3|ML Engineer livre clustering → alimenter Q2 et Q4 · 5 viz EDA complètes|
 |J4|Data Scientist formule les 5 insights finaux · Dashboard déployé avec Q1–Q5|
 |J5|Soumission finale · Pitch vidéo basé sur Q5 (storytelling)|
 
-\---
+---
 
 ## Sources et références
 
 * **GDELT Project** : https://www.gdeltproject.org/
 * **Documentation CAMEO** : Conflict and Mediation Event Observations Codebook — Schrodt, P.A. (2012)
-* **BigQuery GDELT** : `gdelt-bq.gdeltv2.events` — filtre `ActionGeo\_CountryCode = 'BC'`, `Year >= 2025`
-* **Colonnes clés** : `EventCode`, `GoldsteinScale`, `AvgTone`, `NumMentions`, `NumArticles`, `Actor1CountryCode`, `ActionGeo\_ADM1Code`, `SOURCEURL`, `SQLDATE`
+* **BigQuery GDELT** : `gdelt-bq.gdeltv2.events` — filtre `ActionGeo_CountryCode = 'BN'`, `Year >= 2025`
+* **Colonnes clés** : `EventCode`, `GoldsteinScale`, `AvgTone`, `NumMentions`, `NumArticles`, `Actor1CountryCode`, `ActionGeo_ADM1Code`, `SOURCEURL`, `SQLDATE`
 
-\---
+---
 
