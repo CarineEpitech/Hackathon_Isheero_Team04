@@ -20,6 +20,7 @@ folium==0.16.0             # Cartes géographiques interactives (utilise Leaflet
 # =========================
 scikit-learn==1.4.0       # Algorithmes de machine learning (classification, régression, clustering)
 numpy==1.26.0             # Calcul scientifique et manipulation de tableaux multidimensionnels
+joblib==1.3.2             # Sérialisation des modèles ML (sauvegarde / chargement)
 
 # =========================
 # NLP / Sentiment Analysis

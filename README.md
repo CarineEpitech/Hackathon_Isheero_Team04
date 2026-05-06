@@ -35,7 +35,7 @@ Ce projet analyse 10 722 événements médiatiques recensés par GDELT sur l'ens
 ## Structure du dépôt
 
 ```
-benin_insights_challenge/
+Hackathon_Isheero_Team04/
 ├── Pipeline.py                        # Pipeline d'extraction et nettoyage GDELT
 ├── requirements.txt                   # Dépendances Python
 │
@@ -54,7 +54,7 @@ benin_insights_challenge/
 │   ├── 02_eda_exploration.ipynb       # EDA principale — 8 sections analytiques
 │   ├── 03_feature_engineering_v0.ipynb# Feature engineering pour ML
 │   ├── 03_ml_models.ipynb             # Modèles ML
-│   └── README_EDA.md                  # Documentation du notebook EDA
+│   └── 04_analyse_complete.ipynb      # Notebook final : pipeline + EDA + ML
 │
 ├── dashboard/
 │   ├── app.py                         # Application Streamlit
@@ -65,7 +65,8 @@ benin_insights_challenge/
 │   ├── insights.md                    # Hypothèses et statuts après EDA
 │   └── benin_insights_questions_analytiques.md  # Questions analytiques détaillées
 │
-└── models/                            # Modèles ML exportés
+└── models/
+    └── random_forest_ton.pkl          # Random Forest — prédiction du ton médiatique
 ```
 
 ---
@@ -125,7 +126,7 @@ Issus du notebook `02_eda_exploration.ipynb`, section 8.
 
 | Question | Résultat |
 |----------|----------|
-| **Ton médiatique** | Négatif sur les 12 mois (moyenne : −1,22). Score Goldstein positif (+0,56) — paradoxe entre stabilité perçue et ton des articles. |
+| **Ton médiatique** | Négatif sur 11 des 12 mois (moyenne : −1,22). Score Goldstein positif (+0,56) — paradoxe entre stabilité perçue et ton des articles. |
 | **Narratifs dominants** | 65 % de coopération verbale (diplomatie, consultations). 25,5 % de conflits (verbal + matériel). |
 | **Géographie interne** | Le nord représente 4,9 % des événements mais affiche un ton 3× plus négatif que le sud (−4,29 vs −1,09). Causalité avec l'image nationale non établie. |
 | **Pics médiatiques** | 8 dates anormales détectées (Z-score, MAD, fenêtre glissante). Décembre 2025 : séquence de 6 jours consécutifs, +131 % au-dessus de la médiane mensuelle. |
@@ -151,7 +152,7 @@ Issus du notebook `02_eda_exploration.ipynb`, section 8.
 - L'analyse du biais francophone/anglophone (H1 sous-volet) n'a pas été réalisée dans l'EDA.
 - Les pics détectés correspondent aux anomalies au moment où elles surviennent. La détection de signaux *précurseurs* n'a pas été implémentée.
 - Les événements réels associés aux pics (10 jan, 17 avr, 7–12 déc) n'ont pas été identifiés formellement depuis les données.
-- `models/` en cours de finalisation.
+- La détection de signaux *précurseurs* (avant les crises) n'a pas été implémentée.
 
 ---
 

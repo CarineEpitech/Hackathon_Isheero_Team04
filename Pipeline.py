@@ -7,8 +7,8 @@ import numpy as np           # Calculs numériques
 import os                    # Gestion des fichiers et dossiers
 from pathlib import Path     # Gestion des chemins de fichiers
 
-# Chemin racine du projet (2 niveaux au-dessus de ce fichier)
-ROOT_DIR = Path(__file__).resolve().parent.parent
+# Chemin racine du projet (Pipeline.py est à la racine du repo)
+ROOT_DIR = Path(__file__).resolve().parent
 
 def run_pipeline(input_path=None, output_dir=None):
     # Fonction principale qui enchaîne toutes les étapes du pipeline

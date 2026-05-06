@@ -15,7 +15,7 @@ Nous avons analysé **10 722 documents médiatiques** publiés sur le Bénin dan
 
 Sur l'ensemble de l'année 2025, le ton moyen des articles consacrés au Bénin reste négatif chaque mois, sans exception. Le Nigeria domine la couverture, aussi bien comme pays d'origine des acteurs couverts que comme source médiatique principale. La coopération diplomatique est le type d'événement le plus fréquent (65 % des événements), mais ce sont les événements conflictuels qui génèrent la tonalité la plus défavorable.
 
-*Chiffre clé : ton moyen annuel = −1,22 (sur une échelle de −100 à +100) — aucun mois positif sur 12.*
+*Chiffre clé : ton moyen annuel = −1,22 (sur une échelle de −100 à +100) — 11 des 12 mois affichent un ton négatif.*
 
 ---
 
