@@ -41,10 +41,11 @@ Hackathon_Isheero_Team04/
 │
 ├── data/
 │   ├── raw/
-│   │   └── benin_raw.csv              # Données brutes extraites de BigQuery
+│   │   ├── benin_raw.csv              # Données brutes extraites de BigQuery (non committé)
+│   │   └── query_bigquery.sql         # Requête SQL pour régénérer benin_raw.csv
 │   └── processed/
-│       ├── benin_clean.csv            # Données nettoyées
-│       ├── benin_enrichi.csv          # Données enrichies (colonnes calculées)
+│       ├── benin_clean.csv            # Données nettoyées (avant colonnes calculées)
+│       ├── benin_enrichi.csv          # Données enrichies (colonnes calculées ajoutées)
 │       └── benin_enrichi.parquet      # Format compressé (chargement rapide)
 │
 ├── notebooks/
@@ -91,12 +92,21 @@ pip install -r requirements.txt
 
 ## Reproduire les données
 
+**Étape 1 — Extraire les données brutes depuis BigQuery**
+
+La requête d'extraction est dans `data/raw/query_bigquery.sql`.
+Exécuter cette requête dans la console BigQuery (projet `gdelt-bq`) et exporter le résultat en CSV sous `data/raw/benin_raw.csv`.
+
+**Étape 2 — Lancer le pipeline de nettoyage et d'enrichissement**
+
 ```bash
-# Extraction et nettoyage (nécessite un accès BigQuery configuré)
 python Pipeline.py
 ```
 
-Les fichiers produits sont déposés dans `data/processed/`.
+Fichiers produits dans `data/processed/` :
+- `benin_clean.csv` — données nettoyées, sans colonnes calculées
+- `benin_enrichi.csv` — données nettoyées + colonnes calculées (ton, zone, quadclass...)
+- `benin_enrichi.parquet` — même contenu que enrichi, format compressé
 
 ---
 
@@ -126,9 +136,9 @@ Issus du notebook `02_eda_exploration.ipynb`, section 8.
 
 | Question | Résultat |
 |----------|----------|
-| **Ton médiatique** | Négatif sur 11 des 12 mois (moyenne : −1,22). Score Goldstein positif (+0,56) — paradoxe entre stabilité perçue et ton des articles. |
+| **Ton médiatique** | Négatif sur 11 des 12 mois (moyenne : −1,22). Score Goldstein médiane positive (+1,9) — les deux mesures sont indépendantes : Goldstein reflète la nature des événements, AvgTone reflète le registre linguistique des articles. |
 | **Narratifs dominants** | 65 % de coopération verbale (diplomatie, consultations). 25,5 % de conflits (verbal + matériel). |
-| **Géographie interne** | Le nord représente 4,9 % des événements mais affiche un ton 3× plus négatif que le sud (−4,29 vs −1,09). Causalité avec l'image nationale non établie. |
+| **Géographie interne** | Le nord représente 3,8 % des événements mais affiche un ton près de 4× plus négatif que le sud (−4,36 vs −1,13). Test Mann-Whitney : p < 0,001, r = 0,42. Causalité avec l'image nationale non établie. |
 | **Pics médiatiques** | 8 dates anormales détectées (Z-score, MAD, fenêtre glissante). Décembre 2025 : séquence de 6 jours consécutifs, +131 % au-dessus de la médiane mensuelle. |
 | **Moments marquants** | Décembre 2025 domine l'année (1 954 événements sur 10 722). Deux autres pics isolés : 10 janvier et 17 avril 2025. |
 
@@ -138,7 +148,7 @@ Issus du notebook `02_eda_exploration.ipynb`, section 8.
 
 | Hypothèse | Statut |
 |-----------|--------|
-| H1 — Image plus négative depuis mi-2025 | ⚠️ Partiellement confirmée |
+| H1 — Ton médiatique négatif sur 2025 | ⚠️ Partiellement confirmée — ton négatif sur 11/12 mois confirmé. La dégradation "depuis mi-2025" n'est pas testable avec les données d'une seule année. |
 | H2 — Sujets dominants : sécurité, coopération, culture | ⚠️ Partiellement confirmée |
 | H3 — Impact des attaques au nord sur l'image globale | ⚠️ Asymétrie confirmée — causalité non établie |
 | H4 — Signaux précurseurs avant crises | ⏳ Non testée — détection de pics uniquement |
@@ -148,7 +158,7 @@ Issus du notebook `02_eda_exploration.ipynb`, section 8.
 
 ## Limites
 
-- La segmentation géographique nord/centre/sud repose sur des seuils de latitude approximatifs.
+- La segmentation géographique nord/centre/sud repose sur une correspondance textuelle entre `ActionGeo_FullName` et des listes de communes. Les événements non reconnus sont classés en « sud » par défaut.
 - L'analyse du biais francophone/anglophone (H1 sous-volet) n'a pas été réalisée dans l'EDA.
 - Les pics détectés correspondent aux anomalies au moment où elles surviennent. La détection de signaux *précurseurs* n'a pas été implémentée.
 - Les événements réels associés aux pics (10 jan, 17 avr, 7–12 déc) n'ont pas été identifiés formellement depuis les données.

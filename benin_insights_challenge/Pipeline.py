@@ -153,6 +153,10 @@ def run_pipeline(input_path=None, output_dir=None):
     print(f"    {nb_dates:,} lignes sans date supprimées")
     print(f"    {len(df):,} lignes restantes")
 
+    # Snapshot du dataframe nettoyé, avant l'ajout des colonnes calculées.
+    # C'est ce snapshot qui sera sauvegardé dans benin_clean.csv.
+    df_clean = df.copy()
+
     # ════════════════════════════════════════════════════
     # ÉTAPE 5 : ENRICHISSEMENT
     # ════════════════════════════════════════════════════
@@ -225,30 +229,39 @@ def run_pipeline(input_path=None, output_dir=None):
 
     # ── Classification zone géographique ─────────────
     
-    departements_nord = [# Alibori
-    "Banikoara", "Gogounou", "Kandi", "Karimama", "Malanville", "Segbana", "Alassane", "Gbeke", "Alibori", "Kantoro", "Mehrou", "Toura"
-
-    # Atacora
-    "Boukoumbé", "Cobly", "Kerou", "Kouandé", "Matéri", "Natitingou", "Péhunco", "Tanguieta", "Toucountouna", "Akoko", "Kayode", "Atakora", "Porga", "Taiakou", "Tanougou", "Tobre"
-
-    # Donga
-    "Bassila", "Copargo", "Djougou", "Ouaké", "Donga"
-
-    # Borgou
-    "Bembereke", "Kalale", "Ndali", "Nikki", "Parakou", "Pèrèrè", "Sinendé", "Tchaourou", "Babariba", "Bouca", "Gokana", "Gourou", "Kika" "Borgou", "Sekere"]
-    # BN01=Alibori · BN02=Atacora · BN06=Borgou — zone exposée jihadiste
+    departements_nord = [
+        # Alibori
+        "Banikoara", "Gogounou", "Kandi", "Karimama", "Malanville", "Segbana",
+        "Alassane", "Gbeke", "Alibori", "Kantoro", "Mehrou", "Toura",
+        # Atacora
+        "Boukoumbé", "Cobly", "Kerou", "Kouandé", "Matéri", "Natitingou",
+        "Péhunco", "Tanguieta", "Toucountouna", "Akoko", "Kayode", "Atakora",
+        "Porga", "Taiakou", "Tanougou", "Tobre",
+        # Donga
+        "Bassila", "Copargo", "Djougou", "Ouaké", "Donga",
+        # Borgou — BN01=Alibori · BN02=Atacora · BN06=Borgou
+        "Bembereke", "Kalale", "Ndali", "Nikki", "Parakou", "Pèrèrè",
+        "Sinendé", "Tchaourou", "Babariba", "Bouca", "Gokana", "Gourou",
+        "Kika", "Borgou", "Sekere",
+    ]
 
     departements_centre = [
-    # Zou
-    "Abomey", "Agbangnizoun", "Bohicon", "Cové", "Djidja",
-    "Ouinhi", "Kpota", "Zagnanado", "Zogbodomey", "Dosso", "Zou"
-
-    # Collines
-    "Bantè", "Dassa-Zoume", "Glazoue", "Ouèssè", "Savalou", "Savè", "Alafia", "Kokou", "Collines", "Ogou", "Okio"
+        # Zou
+        "Abomey", "Agbangnizoun", "Bohicon", "Cové", "Djidja",
+        "Ouinhi", "Kpota", "Zagnanado", "Zogbodomey", "Dosso", "Zou",
+        # Collines
+        "Bantè", "Dassa-Zoume", "Glazoue", "Ouèssè", "Savalou", "Savè",
+        "Alafia", "Kokou", "Collines", "Ogou", "Okio",
     ]
     # Départements du centre — Zou et Collines
 
     # Le sud = Atlantique, Littoral (Cotonou), Ouémé, Plateau, Mono, Couffo
+
+    # Contrôle : aucune entrée ne doit dépasser 30 caractères.
+    # Une valeur plus longue signale une virgule manquante (concaténation silencieuse).
+    for _val in departements_nord + departements_centre:
+        if len(_val) > 30:
+            print(f"    Avertissement : valeur suspecte dans la liste de villes : '{_val}' ({len(_val)} car.)")
 
     def classifier_zone(nom_lieu):
         # Classifier un lieu béninois en nord, centre ou sud
@@ -334,21 +347,24 @@ def run_pipeline(input_path=None, output_dir=None):
     # Créer le dossier de sortie s'il n'existe pas
     # exist_ok=True évite une erreur si le dossier existe déjà
 
-    df.to_csv(f"{output_dir}/benin_clean.csv", index=False)
-    # Sauvegarder le fichier CSV propre (index=False = pas d'index pandas)
+    # benin_clean.csv : données nettoyées uniquement, sans colonnes calculées
+    df_clean.to_csv(f"{output_dir}/benin_clean.csv", index=False)
 
+    # benin_enrichi.csv / .parquet : données nettoyées + toutes les colonnes calculées
     df.to_csv(f"{output_dir}/benin_enrichi.csv", index=False)
-    # Sauvegarder le fichier CSV enrichi avec toutes les colonnes calculées
-
     df.to_parquet(f"{output_dir}/benin_enrichi.parquet", index=False)
-    # Sauvegarder en Parquet — plus compact et plus rapide que CSV
 
-    taille_csv = os.path.getsize(f"{output_dir}/benin_enrichi.csv") / 1024
+    assert df_clean.shape[1] < df.shape[1], (
+        f"Erreur : benin_clean ({df_clean.shape[1]} colonnes) devrait avoir "
+        f"moins de colonnes que benin_enrichi ({df.shape[1]} colonnes)."
+    )
+
+    taille_clean   = os.path.getsize(f"{output_dir}/benin_clean.csv") / 1024
+    taille_csv     = os.path.getsize(f"{output_dir}/benin_enrichi.csv") / 1024
     taille_parquet = os.path.getsize(f"{output_dir}/benin_enrichi.parquet") / 1024
-    # Calculer la taille des fichiers en kilooctets
 
-    print(f"    benin_clean.csv      ({taille_csv:.0f} KB)")
-    print(f"    benin_enrichi.csv    ({taille_csv:.0f} KB)")
+    print(f"    benin_clean.csv       ({taille_clean:.0f} KB — {df_clean.shape[1]} colonnes, sans enrichissement)")
+    print(f"    benin_enrichi.csv     ({taille_csv:.0f} KB — {df.shape[1]} colonnes)")
     print(f"    benin_enrichi.parquet ({taille_parquet:.0f} KB)")
     print(f"    Dossier : {output_dir}")
 
