@@ -65,6 +65,8 @@ Produit `data/processed/benin_enrichi.parquet` à partir de `data/raw/benin_raw.
 
 ## Lancer le dashboard
 
+**Version déployée :** [https://benin-insights-2025-team04.streamlit.app/](https://benin-insights-2025-team04.streamlit.app/)
+
 ```bash
 streamlit run dashboard/app.py
 ```

@@ -1,20 +1,21 @@
 # ── Données ───────────────────────────────────────────────
-pandas>=2.0.0
-numpy>=1.24.0
-pyarrow>=14.0.0
+pandas>=2.0.0 # Manipulation des DataFrames
+numpy>=1.24.0 # Calculs numériques
+pyarrow>=14.0.0 # Lecture/écriture du parquet (benin_enrichi.parquet)
 
 # ── Dashboard ─────────────────────────────────────────────
-streamlit>=1.30.0
-plotly>=5.18.0
+streamlit>=1.30.0 # Application web interactive
+plotly>=5.18.0 # Graphiques interactifs (cartes, courbes, barres)
 
 # ── Machine Learning ──────────────────────────────────────
-scikit-learn>=1.3.0
-joblib>=1.3.0
-scipy>=1.11.0
+scikit-learn>=1.3.0 # Random Forest, KMeans, Naive Bayes, métriques
+joblib>=1.3.0 # Sauvegarde/chargement du modèle (.pkl)
+scipy>=1.11.0 # Tests statistiques (Mann-Whitney, Kruskal-Wallis)
 
 # ── Visualisation (notebooks) ─────────────────────────────
-matplotlib>=3.7.0
-seaborn>=0.12.0
+matplotlib>=3.7.0 # Graphiques statiques, matrice de confusion
+seaborn>=0.12.0 # Heatmaps, distributions, corrélations
 
 # ── Utilitaires ───────────────────────────────────────────
-tqdm>=4.65.0
+tqdm>=4.65.0 # Barres de progression (01_pipeline_gdelt)
+kaleido==0.2.1 # Export des figures Plotly en PNG (carte pitch)
