@@ -458,42 +458,51 @@ else:
     with st.expander("Exporter la carte (PNG)"):
         if st.button("Exporter"):
             import io
-            import matplotlib
-            matplotlib.use("Agg")
-            import matplotlib.pyplot as plt
-
             buf = io.BytesIO()
             try:
-                fig_mpl, ax = plt.subplots(figsize=(12, 9))
-                sc = ax.scatter(
-                    df_geo["ActionGeo_Long"],
-                    df_geo["ActionGeo_Lat"],
-                    c=df_geo["AvgTone"],
-                    cmap="RdYlGn",
-                    vmin=-6, vmax=6,
-                    s=df_geo["Taille"] * 12,
-                    alpha=0.65,
-                    edgecolors="none",
-                )
-                plt.colorbar(sc, ax=ax, label="Ton médiatique (AvgTone)")
-                ax.set_xlim(BENIN_LON[0] - 0.2, BENIN_LON[1] + 0.2)
-                ax.set_ylim(BENIN_LAT[0] - 0.2, BENIN_LAT[1] + 0.2)
-                ax.set_title("Événements médiatiques au Bénin — 2025", fontsize=14, pad=12)
-                ax.set_xlabel("Longitude")
-                ax.set_ylabel("Latitude")
-                ax.grid(True, alpha=0.25, linestyle="--")
-                plt.tight_layout()
-                plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
-                plt.close()
-                buf.seek(0)
+                # Export de la figure Plotly avec fond de carte (nécessite kaleido)
+                import plotly.io as pio
+                img_bytes = pio.to_image(fig_map, format="png", width=1400, height=900, scale=2)
                 st.download_button(
                     label="Télécharger carte_benin_pitch.png",
-                    data=buf,
+                    data=img_bytes,
                     file_name="carte_benin_pitch.png",
                     mime="image/png",
                 )
-            except Exception as e:
-                st.error(f"Export impossible : {e}")
+            except Exception:
+                # Fallback matplotlib sans fond de carte
+                try:
+                    import matplotlib
+                    matplotlib.use("Agg")
+                    import matplotlib.pyplot as plt
+                    fig_mpl, ax = plt.subplots(figsize=(12, 9))
+                    sc = ax.scatter(
+                        df_geo["ActionGeo_Long"],
+                        df_geo["ActionGeo_Lat"],
+                        c=df_geo["AvgTone"],
+                        cmap="RdYlGn",
+                        vmin=-6, vmax=6,
+                        s=df_geo["Taille"] * 12,
+                        alpha=0.65,
+                        edgecolors="none",
+                    )
+                    plt.colorbar(sc, ax=ax, label="Ton médiatique (AvgTone)")
+                    ax.set_xlim(BENIN_LON[0] - 0.2, BENIN_LON[1] + 0.2)
+                    ax.set_ylim(BENIN_LAT[0] - 0.2, BENIN_LAT[1] + 0.2)
+                    ax.set_title("Événements médiatiques au Bénin — 2025", fontsize=14, pad=12)
+                    ax.grid(True, alpha=0.25, linestyle="--")
+                    plt.tight_layout()
+                    plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
+                    plt.close()
+                    buf.seek(0)
+                    st.download_button(
+                        label="Télécharger carte_benin_pitch.png",
+                        data=buf,
+                        file_name="carte_benin_pitch.png",
+                        mime="image/png",
+                    )
+                except Exception as e2:
+                    st.error(f"Export impossible : {e2}")
 
 st.divider()
 
