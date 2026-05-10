@@ -454,55 +454,13 @@ else:
     st.caption(
         "Couleur : ton médiatique — rouge = négatif · vert = positif · ""Taille : volume de mentions · ""Coordonnées : ActionGeo_Lat / ActionGeo_Long (GDELT) · "f"Carte : {n_total:,} événements précisément localisés (ville) sur {len(df_filtre):,} au total — "f"les {n_generique:,} événements à localisation pays générique sont exclus de la carte.")
 
-    # Export carte
-    with st.expander("Exporter la carte (PNG)"):
-        if st.button("Exporter"):
-            import io
-            buf = io.BytesIO()
-            try:
-                # Export de la figure Plotly avec fond de carte (nécessite kaleido)
-                import plotly.io as pio
-                img_bytes = pio.to_image(fig_map, format="png", width=1400, height=900, scale=2)
-                st.download_button(
-                    label="Télécharger carte_benin_pitch.png",
-                    data=img_bytes,
-                    file_name="carte_benin_pitch.png",
-                    mime="image/png",
-                )
-            except Exception:
-                # Fallback matplotlib sans fond de carte
-                try:
-                    import matplotlib
-                    matplotlib.use("Agg")
-                    import matplotlib.pyplot as plt
-                    fig_mpl, ax = plt.subplots(figsize=(12, 9))
-                    sc = ax.scatter(
-                        df_geo["ActionGeo_Long"],
-                        df_geo["ActionGeo_Lat"],
-                        c=df_geo["AvgTone"],
-                        cmap="RdYlGn",
-                        vmin=-6, vmax=6,
-                        s=df_geo["Taille"] * 12,
-                        alpha=0.65,
-                        edgecolors="none",
-                    )
-                    plt.colorbar(sc, ax=ax, label="Ton médiatique (AvgTone)")
-                    ax.set_xlim(BENIN_LON[0] - 0.2, BENIN_LON[1] + 0.2)
-                    ax.set_ylim(BENIN_LAT[0] - 0.2, BENIN_LAT[1] + 0.2)
-                    ax.set_title("Événements médiatiques au Bénin — 2025", fontsize=14, pad=12)
-                    ax.grid(True, alpha=0.25, linestyle="--")
-                    plt.tight_layout()
-                    plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
-                    plt.close()
-                    buf.seek(0)
-                    st.download_button(
-                        label="Télécharger carte_benin_pitch.png",
-                        data=buf,
-                        file_name="carte_benin_pitch.png",
-                        mime="image/png",
-                    )
-                except Exception as e2:
-                    st.error(f"Export impossible : {e2}")
+    # Export carte — désactivé (kaleido non disponible sur Streamlit Cloud)
+    # with st.expander("Exporter la carte (PNG)"):
+    #     if st.button("Exporter"):
+    #         import plotly.io as pio, io
+    #         img_bytes = pio.to_image(fig_map, format="png", width=1400, height=900, scale=2)
+    #         st.download_button("Télécharger carte_benin_pitch.png", img_bytes,
+    #                            file_name="carte_benin_pitch.png", mime="image/png")
 
 st.divider()
 
