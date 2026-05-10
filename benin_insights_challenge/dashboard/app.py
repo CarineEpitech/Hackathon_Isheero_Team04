@@ -20,7 +20,9 @@ st.set_page_config(
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
-OUTPUTS_DIR = ROOT_DIR / "outputs"# ── CONSTANTES ────────────────────────────────────────────────────────────────
+OUTPUTS_DIR = ROOT_DIR / "outputs"
+
+# ── CONSTANTES ────────────────────────────────────────────────────────────────
 
 LABELS_TON = {
     "tres_negatif": "Très négatif",
@@ -116,7 +118,9 @@ MAP_MAX_POINTS = 2000
 
 @st.cache_data
 def charger_donnees():
-    chemin_parquet = ROOT_DIR / "data/processed/benin_enrichi.parquet"chemin_csv = ROOT_DIR / "data/processed/benin_enrichi.csv"df = None
+    chemin_parquet = ROOT_DIR / "data/processed/benin_enrichi.parquet"
+    chemin_csv = ROOT_DIR / "data/processed/benin_enrichi.csv"
+    df = None
     if chemin_parquet.exists():
         try:
             df = pd.read_parquet(chemin_parquet)
@@ -246,11 +250,14 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.metric("Événements", f"{len(df_filtre):,}" if not vide else "—")
 with col2:
-    val = f"{df_filtre['AvgTone'].mean():.2f}" if not vide else "—"st.metric("Ton médiatique moyen", val)
+    val = f"{df_filtre['AvgTone'].mean():.2f}" if not vide else "—"
+    st.metric("Ton médiatique moyen", val)
 with col3:
-    val = f"{df_filtre['GoldsteinScale'].mean():.2f}" if not vide else "—"st.metric("Score Goldstein moyen", val)
+    val = f"{df_filtre['GoldsteinScale'].mean():.2f}" if not vide else "—"
+    st.metric("Score Goldstein moyen", val)
 with col4:
-    val = str(df_filtre["SQLDATE"].dt.date.nunique()) if not vide else "—"st.metric("Jours couverts", val)
+    val = str(df_filtre["SQLDATE"].dt.date.nunique()) if not vide else "—"
+    st.metric("Jours couverts", val)
 
 st.caption(
     "Ton : −100 (très négatif) → +100 (très positif) · ""Goldstein : −10 (déstabilisant) → +10 (stabilisant)"
@@ -382,7 +389,8 @@ else:
     if n_total > MAP_MAX_POINTS:
         df_geo = df_geo.sample(MAP_MAX_POINTS, random_state=42)
 
-    df_geo["Zone"] = df_geo["zone_benin"].map(LABELS_ZONES).fillna("Inconnu") if "zone_benin" in df_geo.columns else "Inconnu"df_geo["Taille"] = (df_geo["NumMentions"].clip(upper=100).fillna(5) / 10 + 4).round(1)
+    df_geo["Zone"] = df_geo["zone_benin"].map(LABELS_ZONES).fillna("Inconnu") if "zone_benin" in df_geo.columns else "Inconnu"
+    df_geo["Taille"] = (df_geo["NumMentions"].clip(upper=100).fillna(5) / 10 + 4).round(1)
     df_geo["Lieu"] = df_geo["ActionGeo_FullName"].fillna("Localisation inconnue")
 
     _map_title = (
@@ -446,13 +454,12 @@ else:
     st.caption(
         "Couleur : ton médiatique — rouge = négatif · vert = positif · ""Taille : volume de mentions · ""Coordonnées : ActionGeo_Lat / ActionGeo_Long (GDELT) · "f"Carte : {n_total:,} événements précisément localisés (ville) sur {len(df_filtre):,} au total — "f"les {n_generique:,} événements à localisation pays générique sont exclus de la carte.")
 
-    # Export pour le PowerPoint
-    with st.expander("Exporter la carte pour le pitch (PNG)"):
-        st.markdown(
-            "Génère `outputs/carte_benin_pitch.png` à insérer dans le PowerPoint.\n\n""Nécessite `kaleido` (`pip install kaleido`) ou utilise matplotlib en fallback.")
-        if st.button("Générer carte_benin_pitch.png"):
+    # Export carte
+    with st.expander("Exporter la carte (PNG)"):
+        if st.button("Exporter"):
             OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
-            out_path = OUTPUTS_DIR / "carte_benin_pitch.png"exported = False
+            out_path = OUTPUTS_DIR / "carte_benin_pitch.png"
+            exported = False
 
             # Tentative 1 : kaleido (meilleure qualité)
             try:
