@@ -179,7 +179,8 @@ def run_pipeline(input_path=None, output_dir=None):
     def categoriser_ton(tone):
         # Catégoriser le ton médiatique en 5 niveaux
         if pd.isna(tone):
-            return 'inconnu'elif tone > 3:
+            return 'inconnu'
+        elif tone > 3:
             return 'tres_positif'# Couverture très favorable
         elif tone > 1:
             return 'positif'# Couverture favorable
@@ -197,7 +198,8 @@ def run_pipeline(input_path=None, output_dir=None):
     def categoriser_goldstein(score):
         # Catégoriser le score de stabilité en 5 niveaux
         if pd.isna(score):
-            return 'inconnu'elif score >= 5:
+            return 'inconnu'
+        elif score >= 5:
             return 'tres_cooperatif'# Événement très stabilisateur
         elif score > 0:
             return 'cooperatif'# Événement positif
@@ -264,19 +266,16 @@ def run_pipeline(input_path=None, output_dir=None):
             return 'inconnu'# Valeur manquante → inconnu
 
         nom_lieu_str = str(nom_lieu).lower()
-        # Convertir en minuscules pour ignorer la casse
-        # Ex : "KANDI, BENIN" → "kandi, benin"if any(ville.lower() in nom_lieu_str for ville in departements_nord):
-            return 'nord'# Ex : "Kandi, Alibori, Benin" contient "kandi" → nord
-
+        if any(ville.lower() in nom_lieu_str for ville in departements_nord):
+            return 'nord'
         elif any(ville.lower() in nom_lieu_str for ville in departements_centre):
-            return 'centre'# Ex : "Bohicon, Zou, Benin" contient "bohicon" → centre
-
+            return 'centre'
         elif pd.notna(nom_lieu):
-            return 'sud'# Lieu connu mais pas dans nord ni centre → sud
-            # Ex : "Cotonou, Littoral, Benin" → sud
-
+            return 'sud'
         else:
-            return 'inconnu'if 'ActionGeo_FullName' in df.columns:
+            return 'inconnu'
+
+    if 'ActionGeo_FullName' in df.columns:
         df['zone_benin'] = df['ActionGeo_FullName'].apply(classifier_zone)
         # Appliquer la classification à chaque ligne de ActionGeo_FullName
 
@@ -284,13 +283,16 @@ def run_pipeline(input_path=None, output_dir=None):
     def extraire_domaine(url):
         # Extraire le domaine depuis l'URL pour identifier le média et sa langue
         if pd.isna(url):
-            return 'inconnu'try:
+            return 'inconnu'
+        try:
             domaine = str(url).split('/')[2]
             # Prendre la 3ème partie de l'URL (ex: "www.rfi.fr")
             domaine = domaine.replace('www.', '')
-            # Supprimer le préfixe "www."return domaine
+            return domaine
         except:
-            return 'inconnu'if 'SOURCEURL' in df.columns:
+            return 'inconnu'
+
+    if 'SOURCEURL' in df.columns:
         df['source_domaine'] = df['SOURCEURL'].apply(extraire_domaine)
         # Extraire le domaine de chaque URL pour identifier le média
 
