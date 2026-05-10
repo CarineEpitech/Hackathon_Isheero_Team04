@@ -12,7 +12,7 @@ from datetime import date
 
 st.set_page_config(
     page_title="Bénin Insights 2025",
-    page_icon=None,
+    page_icon="🇧🇯",
     layout="wide",
 )
 
@@ -457,54 +457,43 @@ else:
     # Export carte
     with st.expander("Exporter la carte (PNG)"):
         if st.button("Exporter"):
-            OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
-            out_path = OUTPUTS_DIR / "carte_benin_pitch.png"
-            exported = False
+            import io
+            import matplotlib
+            matplotlib.use("Agg")
+            import matplotlib.pyplot as plt
 
-            # Tentative 1 : kaleido (meilleure qualité)
+            buf = io.BytesIO()
             try:
-                import plotly.io as pio
-                pio.write_image(fig_map, str(out_path), width=1400, height=800, scale=2)
-                exported = True
-                st.success(f"Carte exportée (kaleido) : `{out_path}`")
-            except Exception:
-                pass
-
-            # Tentative 2 : matplotlib (sans dépendance kaleido)
-            if not exported:
-                try:
-                    import matplotlib
-                    matplotlib.use("Agg")
-                    import matplotlib.pyplot as plt
-
-                    fig_mpl, ax = plt.subplots(figsize=(12, 9))
-                    sc = ax.scatter(
-                        df_geo["ActionGeo_Long"],
-                        df_geo["ActionGeo_Lat"],
-                        c=df_geo["AvgTone"],
-                        cmap="RdYlGn",
-                        vmin=-6, vmax=6,
-                        s=df_geo["Taille"] * 12,
-                        alpha=0.65,
-                        edgecolors="none",
-                    )
-                    plt.colorbar(sc, ax=ax, label="Ton médiatique (AvgTone)")
-                    ax.set_xlim(BENIN_LON[0] - 0.2, BENIN_LON[1] + 0.2)
-                    ax.set_ylim(BENIN_LAT[0] - 0.2, BENIN_LAT[1] + 0.2)
-                    ax.set_title(
-                        "Événements médiatiques au Bénin — 2025",
-                        fontsize=14, pad=12,
-                    )
-                    ax.set_xlabel("Longitude")
-                    ax.set_ylabel("Latitude")
-                    ax.grid(True, alpha=0.25, linestyle="--")
-                    plt.tight_layout()
-                    plt.savefig(str(out_path), dpi=150, bbox_inches="tight")
-                    plt.close()
-                    exported = True
-                    st.success(f"Carte exportée (matplotlib) : `{out_path}`")
-                except Exception as e2:
-                    st.error(f"Export impossible : {e2}")
+                fig_mpl, ax = plt.subplots(figsize=(12, 9))
+                sc = ax.scatter(
+                    df_geo["ActionGeo_Long"],
+                    df_geo["ActionGeo_Lat"],
+                    c=df_geo["AvgTone"],
+                    cmap="RdYlGn",
+                    vmin=-6, vmax=6,
+                    s=df_geo["Taille"] * 12,
+                    alpha=0.65,
+                    edgecolors="none",
+                )
+                plt.colorbar(sc, ax=ax, label="Ton médiatique (AvgTone)")
+                ax.set_xlim(BENIN_LON[0] - 0.2, BENIN_LON[1] + 0.2)
+                ax.set_ylim(BENIN_LAT[0] - 0.2, BENIN_LAT[1] + 0.2)
+                ax.set_title("Événements médiatiques au Bénin — 2025", fontsize=14, pad=12)
+                ax.set_xlabel("Longitude")
+                ax.set_ylabel("Latitude")
+                ax.grid(True, alpha=0.25, linestyle="--")
+                plt.tight_layout()
+                plt.savefig(buf, format="png", dpi=150, bbox_inches="tight")
+                plt.close()
+                buf.seek(0)
+                st.download_button(
+                    label="Télécharger carte_benin_pitch.png",
+                    data=buf,
+                    file_name="carte_benin_pitch.png",
+                    mime="image/png",
+                )
+            except Exception as e:
+                st.error(f"Export impossible : {e}")
 
 st.divider()
 
