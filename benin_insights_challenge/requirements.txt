@@ -26,6 +26,11 @@ folium>=0.14.0
 streamlit-folium>=0.15.0
 
 # =========================
+# Extraction BigQuery
+# =========================
+google-cloud-bigquery>=3.11.0
+
+# =========================
 # Utilitaires
 # =========================
 python-dotenv>=1.0.0
