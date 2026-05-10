@@ -42,6 +42,11 @@ Ces fichiers sont produits par `Pipeline.py`. Si aucun des deux n'existe, un mes
 | `quadclass_label` | str | Type d'événement (cooperation_verbale…) |
 | `zone_benin` | str | Zone géographique (nord, centre, sud) |
 | `Actor1CountryCode` | str | Code ISO3 du pays de l'acteur |
+| `ActionGeo_Lat` | float | Latitude GPS (carte) |
+| `ActionGeo_Long` | float | Longitude GPS (carte) |
+| `ActionGeo_ADM1Code` | str | Code département GDELT — filtre centroïde générique ("BN") |
+| `ActionGeo_FullName` | str | Nom complet du lieu (tooltip carte) |
+| `source_domaine` | str | Domaine source extrait de SOURCEURL (section sources médias) |
 
 ---
 
@@ -58,11 +63,17 @@ Le dashboard s'ouvre dans le navigateur à l'adresse `http://localhost:8501`.
 
 ## Filtres disponibles
 
-Disponibles dans la barre latérale gauche.
+**Filtres temporels** (bandeau horizontal, en-tête de page) :
+
+| Filtre | Type | Valeurs |
+|--------|------|---------|
+| **Mois** | Radio | Toute l'année, Jan, Fév, …, Déc |
+| **Plage de dates** | Date range | Disponible si "Toute l'année" est sélectionné |
+
+**Filtres thématiques** (barre latérale gauche) :
 
 | Filtre | Colonne | Valeurs |
 |--------|---------|---------|
-| **Trimestre** | `trimestre` | T1 (jan–mar), T2 (avr–jun), T3 (jul–sep), T4 (oct–déc) |
 | **Ton médiatique** | `ton_categorie` | Très négatif, Négatif, Neutre, Positif, Très positif |
 | **Type d'événement** | `quadclass_label` | Coopération (verbale), Coopération (matérielle), Conflit (verbal), Conflit (matériel) |
 
@@ -79,9 +90,12 @@ Les filtres s'appliquent à toutes les visualisations sauf la table des moments 
 | Évolution temporelle | Courbe Goldstein mensuel + ligne à 0 | Q1 — Stabilité géopolitique |
 | Moments marquants | Table des 8 dates anormales (événements, mentions, ton, Goldstein) | Q4 — Détection de pics |
 | Moments marquants | Courbe volume quotidien avec marqueurs sur dates anormales | Q5 — Périodes marquantes |
-| Géographie interne | Bar chart horizontal nord / centre / sud (ton moyen) + tableau | Q3 — Asymétrie géographique |
+| Carte | Scatter map événements précisément localisés (hors centroïde générique) | Q3 — Localisation |
+| Géographie interne | Bar chart nord / centre / sud (ton moyen) + tableau + avertissement biais | Q3 — Asymétrie géographique |
+| Modèle prédictif | 4 KPIs ML + graphique importance des variables (Gini) | Composante ML |
 | Narratifs | Bar chart des types d'événements (QuadClass) | Q2 — Narratifs dominants |
 | Acteurs | Bar chart top 10 pays des acteurs impliqués (hors Bénin) | Contexte acteurs |
+| Sources médias | Top domaines sources + part .ng / .bj | Biais de couverture |
 
 ---
 
@@ -89,7 +103,7 @@ Les filtres s'appliquent à toutes les visualisations sauf la table des moments 
 
 - **Pays acteurs ≠ pays sources médias.** `Actor1CountryCode` identifie le pays de l'acteur de l'événement, non le pays d'origine du média qui en parle. Une analyse des sources médiatiques nécessiterait de parser `SOURCEURL`.
 - **Dates anormales codées en dur.** Les 8 dates anormales (10 jan, 17 avr, 7–12 déc 2025) sont issues du notebook EDA (approche multi-méthodes). Elles ne sont pas recalculées dynamiquement par le dashboard.
-- **Contenu événements non disponible.** GDELT ne contient pas le texte des articles. Les événements aux dates anormales sont décrits comme "pic médiatique à contextualiser".
+- **Contenu événements non disponible.** GDELT ne contient pas le texte des articles. Les descriptions contextuelles des 8 dates anormales (dans la table "Moments marquants") sont issues de sources externes vérifiées (AFP, France 24, Euronews, Jeune Afrique).
 - **Parquet nécessite pyarrow.** Si `pyarrow` n'est pas installé, le dashboard bascule automatiquement sur le CSV.
 
 ---

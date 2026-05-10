@@ -1,18 +1,20 @@
-# Questions Analytiques Documentées — Bénin Insights Challenge
+# Questions analytiques — Bénin Insights Challenge
 
 ## Hackathon iSHEERO × DataCamp 2026 · Phase 1 · 27 avril → 5 mai 2026
 
-**Source de données principale :** GDELT Project (Global Database of Events, Language and Tone)  
-**Périmètre géographique :** Bénin (`ActionGeo_CountryCode = 'BN'`)  
-**Période d'analyse :** 2025
+**Source de données :** GDELT Project (Global Database of Events, Language and Tone) 
+**Périmètre :** Bénin (`ActionGeo_CountryCode = 'BN'`) 
+**Période :** 2025
+
+> **Note :** Ce document a été rédigé en début de projet comme cadre de travail. Les méthodes listées sont celles qui étaient prévues — certaines ont été modifiées ou non implémentées lors de l'exécution. Les résultats finaux figurent dans `docs/resume_une_page.md` et les notebooks.
 
 ---
 
 ## Introduction
 
-Le présent document formalise les **5 questions analytiques prioritaires** retenues par l'équipe pour le Bénin Insights Challenge. Ces questions guident l'ensemble du pipeline analytique — de l'extraction GDELT à la construction du dashboard Streamlit, en passant par les modèles ML et les insights finaux présentés au jury.
+Ce document liste les 5 questions analytiques retenues pour le Bénin Insights Challenge. Ces questions ont orienté l'ensemble du pipeline — de l'extraction GDELT au dashboard Streamlit, en passant par les modèles ML et les insights présentés au jury.
 
-Chaque question est documentée selon une structure commune : **formulation**, **justification stratégique**, **indicateurs GDELT mobilisables**, **méthodes d'analyse associées**, et **visualisations cibles**.
+Chaque question est documentée avec : la formulation, la justification, les indicateurs GDELT utilisés, les méthodes d'analyse et les visualisations prévues.
 
 ---
 
@@ -96,7 +98,7 @@ Identifier les narratifs récurrents permet de dépasser la simple mesure quanti
 
 ### Justification stratégique
 
-Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en provenance du Burkina Faso et du Niger. Cette question teste l'hypothèse que la **couverture sécuritaire localisée** contamine l'image globale du pays — un mécanisme dit de "halo négatif". Elle est directement actionnelle pour les décideurs (communication institutionnelle, diplomatie) et très valorisée par les jurys de type policy/data.
+Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en provenance du Burkina Faso et du Niger. Cette question teste l'hypothèse que la couverture sécuritaire localisée dégrade la perception globale du pays dans les médias — un mécanisme parfois appelé "halo négatif" (contamination de l'image nationale par des événements locaux négatifs). Elle intéresse directement les équipes de communication institutionnelle et de diplomatie.
 
 ### Indicateurs GDELT mobilisables
 
@@ -113,7 +115,7 @@ Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en pro
 
 * **Filtre géographique** : isolation des événements dans les départements du nord (`ActionGeo_ADM1Code` correspondant à Alibori / Atacora / Borgou)
 * **Analyse de corrélation temporelle** : corrélation (Pearson ou Spearman) entre pic d'événements sécuritaires au nord et variation de `AvgTone` national
-* **Test de causalité de Granger** (si données suffisantes) : les événements sécuritaires précèdent-ils statistiquement la dégradation de l'image ?
+* **Test de causalité de Granger** (non implémenté — nécessiterait des données multi-annuelles) : les événements sécuritaires précèdent-ils statistiquement la dégradation de l'image ?
 * **Comparaison régionale** : `AvgTone` nord vs reste du pays
 
 ### Visualisations cibles
@@ -132,7 +134,7 @@ Le nord du Bénin est confronté depuis 2021 à des incursions jihadistes en pro
 
 ### Justification stratégique
 
-Cette question introduit une **dimension prédictive et d'alerte précoce** qui distingue une analyse descriptive standard d'un véritable système d'intelligence médiatique. Elle est la plus technique et la plus valorisante pour le jury, car elle mobilise des méthodes ML avancées (détection d'anomalies, séries temporelles) et répond à un besoin réel des décideurs publics et des acteurs de la sécurité.
+Cette question ajoute une dimension prédictive à l'analyse : peut-on identifier des signaux avant qu'une crise médiatique éclate ? Elle mobilise des méthodes de détection d'anomalies sur les séries temporelles et correspond à un besoin réel pour les équipes chargées de la surveillance de l'image d'un pays.
 
 ### Indicateurs GDELT mobilisables
 
@@ -148,7 +150,7 @@ Cette question introduit une **dimension prédictive et d'alerte précoce** qui 
 ### Méthodes d'analyse
 
 * **Détection d'anomalies statistiques** : méthode Z-score ou IQR sur les séries `NumMentions` et `AvgTone` pour identifier les dates atypiques
-* **Modèle de détection de ruptures** : algorithme PELT (Pruned Exact Linear Time) ou BOCPD (Bayesian Online Change Point Detection) sur la série temporelle
+* **Modèle de détection de ruptures** : algorithme PELT (Pruned Exact Linear Time — détection de changements de régime dans une série, rapide et exact) ou BOCPD (Bayesian Online Change Point Detection — version bayésienne adaptée aux données en temps réel) sur la série temporelle (non implémenté dans cette phase)
 * **Clustering temporel** (ML Engineer) : identifier les fenêtres temporelles où plusieurs signaux convergent simultanément
 * **Analyse des précurseurs** : pour chaque pic avéré, regarder rétrospectivement les 2–4 semaines précédentes pour identifier des patterns annonciateurs
 
@@ -168,7 +170,7 @@ Cette question introduit une **dimension prédictive et d'alerte précoce** qui 
 
 ### Justification stratégique
 
-Cette question joue un rôle de **storytelling final** : elle synthétise l'ensemble des analyses précédentes en un récit chronologique des moments-clés de la vie médiatique du Bénin sur 12 mois. Elle est indispensable pour le pitch vidéo (3 min) et le résumé d'une page, car elle offre des repères temporels concrets et facilement communicables à un jury non-technique. Elle ancre l'analyse dans des faits vérifiables et narrativement forts.
+Cette question synthétise les analyses précédentes en un récit chronologique des moments les plus marquants sur 12 mois. Elle offre des repères temporels concrets pour le pitch et le résumé.
 
 ### Indicateurs GDELT mobilisables
 
@@ -207,16 +209,6 @@ Cette question joue un rôle de **storytelling final** : elle synthétise l'ense
 |Q5|Événements et périodes marquants|Synthétique + narrative|Storytelling final — pitch et résumé|
 
 ---
-
-## Dépendances et calendrier
-
-|Jour|Action clé liée à ces questions|
-|-|-|
-|J1|✅ Ce document — questions validées en équipe|
-|J2|Data Engineer livre `benin_clean.csv` → Data Analyst commence EDA sur Q1 et Q5|
-|J3|ML Engineer livre clustering → alimenter Q2 et Q4 · 5 viz EDA complètes|
-|J4|Data Scientist formule les 5 insights finaux · Dashboard déployé avec Q1–Q5|
-|J5|Soumission finale · Pitch vidéo basé sur Q5 (storytelling)|
 
 ---
 

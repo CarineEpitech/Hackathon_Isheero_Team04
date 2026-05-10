@@ -1,0 +1,24 @@
+{
+  "n_events": 23859,
+  "n_ml": 23859,
+  "acc_dummy": 0.6272,
+  "acc_rf": 0.6984,
+  "f1_macro": 0.6895,
+  "f1_weighted": 0.7029,
+  "cv_mean": 0.6953,
+  "cv_std": 0.0008,
+  "acc_rf_sans_mois": 0.6498,
+  "cv_sans_mois_mean": 0.6442,
+  "gain_baseline": 0.0712,
+  "feature_importance": {
+    "mois": 0.3402,
+    "GoldsteinScale": 0.2466,
+    "EventRootCode": 0.1314,
+    "NumMentions": 0.0972,
+    "NumArticles": 0.0897,
+    "QuadClass": 0.0692,
+    "zone_benin_nord": 0.0125,
+    "zone_benin_sud": 0.0083,
+    "zone_benin_centre": 0.005
+  }
+}

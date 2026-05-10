@@ -1,36 +1,20 @@
-# =========================
-# Core
-# =========================
-streamlit>=1.29.0
-pandas>=2.0.0
-numpy>=1.24.0
-pyarrow>=12.0.0
+# ── Données ───────────────────────────────────────────────
+pandas>=2.0.0 # Manipulation des DataFrames
+numpy>=1.24.0 # Calculs numériques
+pyarrow>=14.0.0 # Lecture/écriture du parquet (benin_enrichi.parquet)
 
-# =========================
-# Visualisation
-# =========================
-plotly>=5.10.0
-matplotlib>=3.7.0
-seaborn>=0.12.0
+# ── Dashboard ─────────────────────────────────────────────
+streamlit>=1.30.0 # Application web interactive
+plotly>=5.18.0 # Graphiques interactifs (cartes, courbes, barres)
 
-# =========================
-# Machine Learning
-# =========================
-scikit-learn>=1.3.0
-joblib>=1.3.0
+# ── Machine Learning ──────────────────────────────────────
+scikit-learn>=1.3.0 # Random Forest, KMeans, Naive Bayes, métriques
+joblib>=1.3.0 # Sauvegarde/chargement du modèle (.pkl)
+scipy>=1.11.0 # Tests statistiques (Mann-Whitney, Kruskal-Wallis)
 
-# =========================
-# Cartographie (si utilisée)
-# =========================
-folium>=0.14.0
-streamlit-folium>=0.15.0
+# ── Visualisation (notebooks) ─────────────────────────────
+matplotlib>=3.7.0 # Graphiques statiques, matrice de confusion
+seaborn>=0.12.0 # Heatmaps, distributions, corrélations
 
-# =========================
-# Extraction BigQuery
-# =========================
-google-cloud-bigquery>=3.11.0
-
-# =========================
-# Utilitaires
-# =========================
-python-dotenv>=1.0.0
+# ── Utilitaires ───────────────────────────────────────────
+tqdm>=4.65.0 # Barres de progression (01_pipeline_gdelt)
