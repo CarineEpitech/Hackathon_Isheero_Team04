@@ -6,7 +6,7 @@
   --terroir-mid:    #234d42;
   --terroir-accent: #2d8a5f;
   --bg-app:         #f0f2f5;
-  --navbar-h:       58px;
+  --navbar-h:       68px;
   --c-normal:       #198754;
   --c-precaution:   #ffc107;
   --c-alerte:       #dc3545;
@@ -31,9 +31,10 @@ html, body {
 .terroir-navbar {
   background: var(--terroir-dark);
   height: var(--navbar-h);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.35);
   padding: 0;
   flex-shrink: 0;
+  z-index: 1030;
 }
 
 .terroir-brand {
