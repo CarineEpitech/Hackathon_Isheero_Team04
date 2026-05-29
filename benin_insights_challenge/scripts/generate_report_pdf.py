@@ -581,25 +581,41 @@ def build_story():
               "de la plateforme, le baseline peut être insuffisant pour les petits départements.",
         ]),
     ]
-    story += h2("10.2 Travaux futurs (V2)")
+    story += h2("10.2 Perspectives futures")
     story += [
         *bullet([
-            "Géolocalisation par NLP sur contenu d'article : la limitation principale "
-              "de GDELT est que ses coordonnées sont extraites des métadonnées de surface "
-              "(titre, entités nommées), sans lecture du corps du texte. Nous prévoyons de "
-              "développer un modèle NLP dédié qui analysera le contenu complet des articles "
-              "sources pour extraire les lieux mentionnés (villes, marchés, axes routiers, "
-              "quartiers), les désambiguïser dans le contexte béninois et produire des "
-              "coordonnées de précision sous-départementale. Ce modèle enrichirait ou "
-              "corrigerait les coordonnées GDELT existantes, réduisant drastiquement "
-              "la part des événements actuellement assignés au centroïde pays (niveau 5).",
-            "Alertes push (email / SMS) déclenchées automatiquement quand le STT "
-              "d'un département franchit le seuil Alerte.",
-            "Migration incidents.db vers PostgreSQL managé pour la persistance multi-déploiement.",
-            "Intégration de sources locales béninoises non indexées par GDELT "
-              "(Frissons d'Afrique, L'Evénement Précis, etc.).",
-            "Module de cartographie des acteurs (Actor1 / Actor2) pour détecter "
-              "les réseaux d'acteurs récurrents dans les zones de tension.",
+            "Intégration de l'intelligence artificielle prédictive : développer des modèles "
+              "capables d'anticiper les zones à risque avant l'apparition d'incidents majeurs, "
+              "en s'appuyant sur les séries temporelles du STT et les patterns CAMEO historiques.",
+            "Alertes automatiques par SMS et email : notifier instantanément les ONG, autorités "
+              "et cellules de crise lorsqu'un seuil critique de tension est franchi dans un département.",
+            "Amélioration de la géolocalisation par NLP : analyser le contenu complet des articles "
+              "sources (corps du texte, pas seulement les métadonnées) pour extraire des localisations "
+              "précises — villages, marchés, axes routiers, quartiers — et réduire la part des "
+              "événements assignés au centroïde pays (actuellement niveau 5 dans la chaîne de priorité).",
+            "Intégration des médias locaux béninois : ajouter radios communautaires, journaux "
+              "locaux et sources non indexées par GDELT (Frissons d'Afrique, L'Evénement Précis, etc.) "
+              "afin d'améliorer la couverture des zones rurales et des événements de faible portée nationale.",
+            "Système d'accès sécurisé et hiérarchisé : limiter l'accès aux données sensibles aux ONG, "
+              "préfectures, commissariats et autorités compétentes, en conservant le formulaire de "
+              "signalement citoyen ouvert au public avec un mécanisme de vérification des signalements.",
+            "Partenariats institutionnels et humanitaires : collaborer avec OCHA, les ONG "
+              "internationales, les ministères béninois et les agences de sécurité régionales afin "
+              "de faire de TERROIR une référence de veille territoriale en Afrique de l'Ouest.",
+            "Tableau de bord décisionnel avancé : développer des interfaces dédiées aux décideurs "
+              "publics et ONG, intégrant indicateurs stratégiques, tendances temporelles et "
+              "recommandations automatiques contextualisées.",
+            "Croisement avec les données climatiques et sociales : intégrer des variables "
+              "climatiques, économiques et sociales pour identifier les facteurs structurels "
+              "aggravant les tensions territoriales au-delà de la couverture médiatique.",
+            "API ouverte pour chercheurs et développeurs : exposer une API sécurisée permettant "
+              "aux universités, chercheurs et développeurs tiers d'exploiter les données TERROIR "
+              "pour des analyses, visualisations et applications complémentaires.",
+            "Migration incidents.db vers PostgreSQL managé : garantir la persistance des "
+              "signalements citoyens entre les redéploiements sur Railway.",
+            "Cartographie des réseaux d'acteurs : exploiter les champs Actor1 / Actor2 de GDELT "
+              "pour détecter les acteurs récurrents dans les zones de tension et cartographier "
+              "leurs interactions dans le temps.",
         ]),
     ]
 
@@ -735,10 +751,6 @@ def build_story():
     story += [
         sp(6),
         hr(C_TEAL, 1),
-        sp(4),
-        p("Rapport généré automatiquement le " + TODAY + ". "
-          "BéninScope — TERROIR, Hackathon iSHEERO x DataCamp 2026, Equipe 04.",
-          "caption"),
     ]
 
     return story
