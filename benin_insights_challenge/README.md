@@ -239,6 +239,5 @@ Aucun modèle propriétaire n'a été entraîné. Aucune donnée personnelle n'a
 | Membre | Rôle |
 |--------|------|
 | Agboton Carine | Architecture de données, pipeline GDELT, coordination technique |
-| Gbaguidi Adewale | Développement backend, API FastAPI, déploiement Railway |
 | Houndofi Jacques | Analyse et modélisation, Score de Tension Territorial |
 | Yaoitcha Rosine | Visualisation, dashboard Streamlit, communication |

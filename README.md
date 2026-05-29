@@ -2,7 +2,9 @@
 
 Plateforme de veille territoriale et d'alerte précoce au Bénin, développée lors du Hackathon iSHEERO × DataCamp 2026.
 
-**Démo en ligne :** [terroir.up.railway.app](https://terroir.up.railway.app)
+**Application live :** [terroir.up.railway.app](https://terroir.up.railway.app)
+
+**Dashboard analytique :** [benin-insights-2025-team04.streamlit.app](https://benin-insights-2025-team04.streamlit.app/)
 
 ---
 
@@ -32,7 +34,7 @@ TERROIR cherche à combler cet écart — pas en remplaçant l'expertise humaine
 Flux GDELT (toutes les 15 min)          Signalements terrain (citoyens)
             +                                        +
       Filtre géographique                    Validation manuelle
-      (18 départements Bénin)
+      (12 départements Bénin)
                     |
                     v
          Score de Tension Territorial
@@ -55,7 +57,13 @@ GDELT publie toutes les 15 minutes un fichier contenant l'ensemble des événeme
 Visualisation en temps quasi réel des événements GDELT géolocalisés au Bénin. Chaque point représente un article de presse, coloré selon la gravité (ton négatif, code CAMEO sécuritaire). Filtre par type d'événement et par fenêtre temporelle (24h, 48h, 7 jours).
 
 **Scoring territorial (STT)**
-Le Score de Tension Territorial compare l'activité des 14 derniers jours à la baseline des 90 jours précédents pour chaque département. Trois niveaux : Normal, Précaution, Alerte. Le calcul pondère le ton moyen, le volume d'événements, les codes sécuritaires et le nombre de sources.
+Le Score de Tension Territorial compare l'activité des 14 derniers jours à la baseline des 90 jours précédents pour chaque département. Le calcul pondère les codes sécuritaires CAMEO (40 %), le ton moyen (35 %), le volume (15 %) et la diversité des sources (10 %).
+
+| Niveau | Seuil STT | Action recommandée |
+|--------|-----------|-------------------|
+| Normal | < 2,0 | Veille habituelle |
+| Précaution | 2,0 – 3,0 | Vérification avec relais local |
+| Alerte | > 3,0 | Contacter coordinateur sécurité |
 
 **Signalements citoyens**
 Un formulaire simple permet à toute personne présente sur le terrain de signaler une situation. Les signalements sont visibles sur la carte (en attente de validation) et comptabilisés comme signal complémentaire.
@@ -99,7 +107,7 @@ Backend (Python)
 Données
   benin_enrichi.parquet  —  31 529 événements, janv. 2025 → mai 2026
   benin_live.parquet     —  fenêtre mobile 30 jours (mise à jour automatique)
-  incidents.csv          —  signalements citoyens
+  incidents.db (SQLite)  —  signalements citoyens
 
 Déploiement
   Railway  —  conteneur Docker, redémarrage automatique
@@ -172,9 +180,16 @@ cd benin_insights_challenge
 uvicorn backend.main:app --reload --port 8000
 ```
 
-L'interface est accessible sur **http://localhost:8000**
+En local, l'interface est accessible sur `http://localhost:8000` et la documentation de l'API sur `http://localhost:8000/api/docs`.
 
-La documentation de l'API est disponible sur **http://localhost:8000/api/docs**
+**En production :**
+
+| Service | URL |
+|---------|-----|
+| Application live | [terroir.up.railway.app](https://terroir.up.railway.app) |
+| Dashboard analytique | [benin-insights-2025-team04.streamlit.app](https://benin-insights-2025-team04.streamlit.app/) |
+| Documentation API | [terroir.up.railway.app/api/docs](https://terroir.up.railway.app/api/docs) |
+| Statut GDELT | [terroir.up.railway.app/api/gdelt/status](https://terroir.up.railway.app/api/gdelt/status) |
 
 Au démarrage, le poller GDELT s'active automatiquement et commence à collecter les données live en arrière-plan.
 
@@ -207,6 +222,18 @@ Quelques directions pour une version production :
 
 ---
 
+## Divulgation IA
+
+Ce projet a utilisé **Claude Sonnet 4.6 (Anthropic)** comme assistant au développement : architecture du pipeline, conception du STT, debugging et rédaction du rapport final. Les scores GDELT (AvgTone, GoldsteinScale, codes CAMEO) sont produits par les modèles NLP internes au projet GDELT — utilisés comme features, non recalculés.
+
+---
+
 ## Équipe
 
 **BeninScope** — Hackathon iSHEERO × DataCamp 2026
+
+| Membre | Rôle |
+|--------|------|
+| Agboton Carine | Architecture de données, pipeline GDELT, coordination technique |
+| Houndofi Jacques | Analyse et modélisation, Score de Tension Territorial |
+| Yaoitcha Rosine | Visualisation, dashboard Streamlit, communication |

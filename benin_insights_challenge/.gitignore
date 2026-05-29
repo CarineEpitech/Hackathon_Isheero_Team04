@@ -27,6 +27,9 @@ scripts/create_deck_jury.py
 scripts/md_to_docx.py
 scripts/generate_report_pdf.py
 
+# Backup README
+README_backup_original.md
+
 # Docs internes / audits non destinés au repo public
 docs/repo_cleanup_audit.md
 docs/questions_jury_beninscope.md
