@@ -23,7 +23,7 @@
 <div id="app">
 
   <!-- ── NAVBAR ─────────────────────────────────────────────────────── -->
-  <nav class="navbar navbar-expand-lg terroir-navbar">
+  <nav class="navbar navbar-expand-lg terroir-navbar" data-bs-theme="dark">
     <div class="container-fluid px-4">
 
       <a class="navbar-brand terroir-brand d-flex align-items-center gap-2" href="#/live">
@@ -112,10 +112,14 @@
                       @click="setMapHours(72)">72h</button>
               <button type="button" class="btn"
                       :class="mapHours===168 ? 'btn-secondary' : 'btn-outline-secondary'"
-                      @click="setMapHours(168)">7 jours</button>
+                      @click="setMapHours(168)">
+                <span class="d-none d-sm-inline">7 jours</span><span class="d-sm-none">7j</span>
+              </button>
               <button type="button" class="btn"
                       :class="mapHours===720 ? 'btn-secondary' : 'btn-outline-secondary'"
-                      @click="setMapHours(720)">30 jours</button>
+                      @click="setMapHours(720)">
+                <span class="d-none d-sm-inline">30 jours</span><span class="d-sm-none">30j</span>
+              </button>
             </div>
 
             <!-- Filtre type -->
@@ -137,11 +141,12 @@
 
             <!-- Rafraîchir carte -->
             <button class="btn btn-sm btn-outline-secondary"
-                    @click="refreshLiveMap" :disabled="mapStatus.loading">
+                    @click="refreshLiveMap" :disabled="mapStatus.loading"
+                    title="Rafraîchir la carte">
               <span v-if="mapStatus.loading"
                     class="spinner-border spinner-border-sm" style="width:.8rem;height:.8rem"></span>
               <i v-else class="bi bi-arrow-clockwise"></i>
-              Rafraîchir
+              <span class="d-none d-md-inline ms-1">Rafraîchir</span>
             </button>
 
             <!-- Toggle Nigeria -->
@@ -163,11 +168,12 @@
 
             <!-- Actualiser GDELT -->
             <button class="btn btn-sm btn-outline-primary"
-                    @click="refreshGdelt" :disabled="gdelt.refreshing">
+                    @click="refreshGdelt" :disabled="gdelt.refreshing"
+                    title="Actualiser GDELT">
               <span v-if="gdelt.refreshing"
                     class="spinner-border spinner-border-sm" style="width:.8rem;height:.8rem"></span>
-              <i v-else class="bi bi-broadcast me-1"></i>
-              Actualiser GDELT
+              <i v-else class="bi bi-broadcast"></i>
+              <span class="d-none d-md-inline ms-1">Actualiser GDELT</span>
             </button>
           </div>
         </div>
@@ -253,7 +259,7 @@
     <div class="gdelt-status-panel px-4 py-2 bg-white border-top">
 
       <!-- En-tête du panneau -->
-      <div class="d-flex align-items-center justify-content-between mb-2">
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
         <div class="d-flex align-items-center gap-2"
              data-bs-toggle="collapse" data-bs-target="#gdelt-details"
              style="cursor:pointer">
@@ -262,7 +268,7 @@
           <i class="bi bi-chevron-down text-secondary" style="font-size:.75rem"></i>
         </div>
         <div class="d-flex align-items-center gap-3">
-          <small class="text-muted" v-if="gdelt.data">
+          <small class="text-muted d-none d-sm-block" v-if="gdelt.data">
             <span class="me-2">
               Base live :
               <strong :class="gdelt.data.live_total_events > 0 ? 'text-primary' : 'text-muted'">
@@ -467,7 +473,7 @@
 
         <!-- ── 1b. Signal terrain complémentaire ────────────────── -->
         <div v-if="stt.incCount !== null" class="mb-4">
-          <div class="d-flex align-items-center gap-3 px-3 py-2 rounded border"
+          <div class="d-flex align-items-center flex-wrap gap-3 px-3 py-2 rounded border"
                :class="stt.incCount > 0 ? 'border-warning bg-warning bg-opacity-10' : 'border-light bg-light'">
             <i class="bi fs-4 flex-shrink-0"
                :class="stt.incCount > 0 ? 'bi-person-exclamation text-warning' : 'bi-person-check text-success'"></i>
@@ -489,7 +495,7 @@
         </div>
 
         <!-- ── 2. Bannière zone la plus surveillée ────────────────── -->
-        <div class="d-flex align-items-center mb-4 terroir-top-banner px-3 py-2 rounded"
+        <div class="d-flex align-items-center flex-wrap mb-4 terroir-top-banner px-3 py-2 rounded gap-2"
              :class="sttTopAlert.level >= 2 ? 'banner-alerte' : sttTopAlert.level === 1 ? 'banner-precaution' : 'banner-normal'"
              v-if="sttTopAlert && sttTopAlert.level >= 1">
           <i class="bi bi-pin-map-fill me-3 fs-4 flex-shrink-0"></i>

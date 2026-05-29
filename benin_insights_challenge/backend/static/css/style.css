@@ -601,9 +601,50 @@ html, body {
 }
 
 /* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Padding horizontal réduit sur mobile */
+  .container-fluid.px-4 {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+  .map-context-bar    { font-size: 0.78rem; }
+  .gdelt-status-panel { font-size: 0.78rem; }
+}
+
 @media (max-width: 576px) {
-  .kpi-value    { font-size: 1.5rem; }
-  .stt-number   { font-size: 1.6rem; }
-  .map-stats-bar{ font-size: 0.72rem; padding: 4px 12px; }
-  #terroir-map  { height: 55vh; }
+  .kpi-value  { font-size: 1.5rem; }
+  .stt-number { font-size: 1.6rem; }
+  .view-title { font-size: 1.05rem; }
+  #terroir-map { height: 55vh; min-height: 280px; }
+
+  /* Stats bar : supprime nowrap, étire sur toute la largeur */
+  .map-stats-bar {
+    left: 8px;
+    right: 8px;
+    bottom: 6px;
+    transform: none;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.9;
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    border-radius: 10px;
+  }
+
+  /* Légende : coin haut-droite pour libérer la barre de statut */
+  .map-legend {
+    bottom: auto;
+    top: 8px;
+    left: auto;
+    right: 8px;
+  }
+
+  /* Bannière top-alert : wrap pour que le bouton passe en dessous */
+  .terroir-top-banner {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* Cartes STT : numéro plus compact */
+  .stt-score-display { gap: 2px; }
 }
