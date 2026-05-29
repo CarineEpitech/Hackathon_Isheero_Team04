@@ -22,9 +22,24 @@ window.TerroirMap = (() => {
     } catch (_) { return null; }
   }
 
+  // Fuseau Bénin pour tous les affichages d'heure
+  const WAT_TZ = "Africa/Porto-Novo";   // UTC+1, pas d'heure d'été
+
   function fmtDate(d) {
     if (!d) return "N/A";
-    return d.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    return d.toLocaleDateString("fr-FR", { timeZone: WAT_TZ, day: "2-digit", month: "2-digit", year: "numeric" });
+  }
+
+  /** Convertit un timestamp ISO (avec ou sans Z) en heure locale Bénin. */
+  function fmtWatTs(isoStr) {
+    if (!isoStr) return "N/A";
+    try {
+      return new Date(isoStr).toLocaleString("fr-FR", {
+        timeZone: WAT_TZ,
+        day: "2-digit", month: "2-digit", year: "numeric",
+        hour: "2-digit", minute: "2-digit",
+      });
+    } catch (_) { return (isoStr + "").slice(0, 16).replace("T", " "); }
   }
 
   // ── Helpers couleur / taille ───────────────────────────────────────────
@@ -129,9 +144,7 @@ window.TerroirMap = (() => {
       ? `<span class="pp-ok">&#10003; Vérifié</span>`
       : `<span class="pp-pending">En attente de validation</span>`;
     const desc = (inc.description || "").slice(0, 160) || "N/A";
-    const ts   = inc.timestamp
-      ? inc.timestamp.slice(0, 16).replace("T", " ")
-      : "N/A";
+    const ts   = fmtWatTs(inc.timestamp);  // heure Bénin (WAT = UTC+1)
     return `
       <div class="terroir-popup">
         <div class="pp-header pp-header-citizen">
@@ -315,7 +328,7 @@ window.TerroirMap = (() => {
         idnPct:        evData.idn_pct ?? null,
         windowInfo,
         lastUpdate: new Date().toLocaleTimeString("fr-FR", {
-          hour: "2-digit", minute: "2-digit",
+          timeZone: WAT_TZ, hour: "2-digit", minute: "2-digit",
         }),
       });
     } catch (err) {

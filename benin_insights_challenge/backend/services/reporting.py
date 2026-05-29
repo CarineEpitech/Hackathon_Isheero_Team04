@@ -5,7 +5,10 @@ SQLite : stockage, lecture et validation des incidents citoyens.
 import sqlite3
 import pandas as pd
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+# Fuseau horaire du Bénin : WAT = UTC+1, sans heure d'été
+WAT = timezone(timedelta(hours=1))
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DB_PATH = PROJECT_ROOT / "backend" / "data" / "incidents.db"
@@ -50,7 +53,7 @@ def submit(type_: str, description: str, lat: float, lon: float,
             """INSERT INTO incidents_citoyens
                (timestamp, type, description, lat, lon, source, pseudo, validated, adm1_code, departement)
                VALUES (?,?,?,?,?,?,?,0,?,?)""",
-            (datetime.utcnow().isoformat(), type_, description, lat, lon, source, pseudo, adm1, dept)
+            (datetime.now(tz=timezone.utc).isoformat(), type_, description, lat, lon, source, pseudo, adm1, dept)
         )
         conn.commit()
         return cur.lastrowid

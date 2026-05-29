@@ -388,10 +388,14 @@ createApp({
       }
     }
 
+    // Heure de Cotonou (WAT = UTC+1, sans heure d'été)
+    const WAT_TZ = "Africa/Porto-Novo";
+
     function formatTs(ts) {
       if (!ts) return "";
       try {
         return new Date(ts).toLocaleString("fr-FR", {
+          timeZone: WAT_TZ,
           day: "2-digit", month: "2-digit", year: "numeric",
           hour: "2-digit", minute: "2-digit",
         });

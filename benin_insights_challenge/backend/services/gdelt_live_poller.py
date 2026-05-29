@@ -21,7 +21,10 @@ import threading
 import requests
 import pandas as pd
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+# Bénin : WAT = UTC+1, sans heure d'été
+WAT = timezone(timedelta(hours=1))
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 
@@ -375,7 +378,7 @@ def _append_new_rows(df_new: pd.DataFrame) -> int:
     df_combined = pd.concat([df_existing, df_really_new], ignore_index=True)
 
     if "SQLDATE" in df_combined.columns:
-        cutoff = pd.Timestamp.now().normalize() - pd.Timedelta(days=30)
+        cutoff = pd.Timestamp.utcnow().normalize() - pd.Timedelta(days=30)  # UTC cohérent avec SQLDATE
         df_combined = df_combined[
             pd.to_datetime(df_combined["SQLDATE"], errors="coerce") >= cutoff
         ]
@@ -388,7 +391,7 @@ def _append_new_rows(df_new: pd.DataFrame) -> int:
 
 def run_one_cycle() -> dict:
     """Lance un cycle complet. Met à jour gdelt_status.json à chaque étape."""
-    now  = datetime.now().isoformat(timespec="seconds")
+    now  = datetime.now(tz=WAT).isoformat(timespec="seconds")  # heure Bénin
     live = _get_live_count()
 
     status = {
@@ -512,7 +515,7 @@ def get_live_stats() -> dict:
     return {
         "n_events":    len(df),
         "last_date":   df["SQLDATE"].max() if "SQLDATE" in df.columns else None,
-        "last_update": datetime.fromtimestamp(LIVE_PATH.stat().st_mtime).strftime("%H:%M:%S"),
+        "last_update": datetime.fromtimestamp(LIVE_PATH.stat().st_mtime, tz=WAT).strftime("%H:%M:%S"),  # heure Bénin
     }
 
 
