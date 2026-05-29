@@ -4,7 +4,7 @@ import math
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Query
 import pandas as pd
-from backend.services.data_loader import load_best_data, safe_column
+from backend.services.data_loader import load_combined_data, safe_column
 
 router = APIRouter(prefix="/api/events", tags=["Événements"])
 
@@ -69,7 +69,7 @@ def events_map(
     hours: Optional[int] = Query(None, ge=1, le=8760, description="Fenêtre temporelle en heures"),
     exclude_nigeria: bool = Query(False, description="Exclure les sources médiatiques nigérianes (IDN)"),
 ):
-    df = load_best_data()
+    df = load_combined_data()
 
     lat_col = safe_column(df, "ActionGeo_Lat", None)
     lon_col = safe_column(df, "ActionGeo_Long", None)
@@ -89,10 +89,9 @@ def events_map(
         if date_col is not None:
             try:
                 dt_col    = pd.to_datetime(date_col, errors="coerce")
-                max_dt    = dt_col.max()
-                if pd.notna(max_dt):
-                    cutoff_dt = max_dt - timedelta(hours=hours)
-                    mask = mask & (dt_col >= cutoff_dt)
+                # Ancrer sur maintenant, pas sur max(SQLDATE)
+                cutoff_dt = datetime.utcnow() - timedelta(hours=hours)
+                mask = mask & (dt_col >= cutoff_dt)
             except Exception:
                 pass
 
@@ -119,7 +118,7 @@ def events_map(
 
 @router.get("/security")
 def events_security(limit: int = Query(200, ge=1, le=2000)):
-    df = load_best_data()
+    df = load_combined_data()
     root_col = safe_column(df, "EventRootCode", 0)
     mask = root_col.apply(_is_security)
     sub = df[mask].tail(limit)
@@ -129,7 +128,7 @@ def events_security(limit: int = Query(200, ge=1, le=2000)):
 
 @router.get("/timeline")
 def events_timeline():
-    df = load_best_data()
+    df = load_combined_data()
     date_col = safe_column(df, "SQLDATE", None)
     root_col = safe_column(df, "EventRootCode", 0)
 
