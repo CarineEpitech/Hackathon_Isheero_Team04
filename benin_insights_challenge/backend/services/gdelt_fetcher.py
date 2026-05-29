@@ -19,7 +19,7 @@ RAW_DIR.mkdir(parents=True, exist_ok=True)
 GDELT_LASTUPDATE = "http://data.gdeltproject.org/gdeltv2/lastupdate.txt"
 GDELT_MASTER_URL = "http://data.gdeltproject.org/gdeltv2/masterfilelist.txt"
 
-BENIN_COUNTRY_CODES = {"BEN", "BN"}
+BENIN_COUNTRY_CODES = {"BN"}   # ActionGeo uniquement (FIPS Bénin = code pays, pas nationalité acteur)
 
 
 def check_gdelt_connection() -> dict:

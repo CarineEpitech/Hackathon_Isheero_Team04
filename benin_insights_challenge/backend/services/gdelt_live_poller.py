@@ -326,11 +326,23 @@ def _download_and_filter(url: str) -> tuple[pd.DataFrame, int]:
             low_memory=False, dtype=str,
         )
         world_count = len(df)
-        mask = (
-            (df["ActionGeo_CountryCode"].str.upper() == "BN") |
-            (df["Actor1CountryCode"].str.upper()     == "BEN") |
-            (df["Actor2CountryCode"].str.upper()     == "BEN")
-        )
+
+        # Filtre géographique strict : l'ACTION doit se passer au Bénin (pays).
+        # On n'utilise PAS les codes nationalité acteur (Actor1/2CountryCode == "BEN")
+        # car ils capturent des événements hors-Bénin impliquant des acteurs béninois,
+        # et confondent le Bénin-pays avec "Bénin City" au Nigéria.
+        cc_mask = df["ActionGeo_CountryCode"].str.upper() == "BN"
+
+        # Double-vérification coordonnées : si GDELT fournit des coords pour une ligne
+        # qui passe le filtre CC, elles doivent tomber dans la bounding box Bénin.
+        # Cela élimine les erreurs de géocodage GDELT (ex. Bénin City → Nigéria lon > 4°E).
+        lat_col = pd.to_numeric(df["ActionGeo_Lat"],  errors="coerce")
+        lon_col = pd.to_numeric(df["ActionGeo_Long"], errors="coerce")
+        has_coords  = lat_col.notna() & lon_col.notna()
+        coords_in_benin = lat_col.between(5.5, 13.0) & lon_col.between(0.5, 4.0)
+        coord_ok = ~has_coords | coords_in_benin  # pas de coords → OK (centroïde plus tard)
+
+        mask = cc_mask & coord_ok
         return df[mask].copy(), world_count
     except Exception as e:
         log.error(f"Erreur téléchargement {url} : {e}")

@@ -53,11 +53,7 @@ FROM
     `gdelt-bq.gdeltv2.events`
 
 WHERE
-    (
-        ActionGeo_CountryCode = 'BN'
-        OR Actor1CountryCode  = 'BEN'
-        OR Actor2CountryCode  = 'BEN'
-    )
+    ActionGeo_CountryCode = 'BN'   -- action géographique au Bénin (FIPS), cohérent avec benin_enrichi.parquet
     AND SQLDATE >= 20250101
     AND SQLDATE < CAST(FORMAT_DATE('%Y%m%d', CURRENT_DATE()) AS INT64)
 
