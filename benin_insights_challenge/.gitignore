@@ -25,3 +25,7 @@ scripts/create_outputs_v4.py
 scripts/create_deck_v5.py
 scripts/create_deck_jury.py
 scripts/md_to_docx.py
+
+# Docs internes / audits non destinés au repo public
+docs/repo_cleanup_audit.md
+docs/questions_jury_beninscope.md
