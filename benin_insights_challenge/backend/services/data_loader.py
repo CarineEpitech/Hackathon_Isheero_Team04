@@ -53,18 +53,31 @@ def load_live_data() -> pd.DataFrame:
     return load_historical_data()
 
 
+def load_combined_data() -> pd.DataFrame:
+    """
+    Fusion historique (benin_enrichi.parquet) + live (benin_live.parquet).
+    Déduplication par GLOBALEVENTID.
+    Source unique pour tous les affichages : carte, graphiques, STT.
+    """
+    df_hist = load_historical_data()
+    if not LIVE_PARQUET.exists():
+        return df_hist
+    try:
+        df_live = pd.read_parquet(LIVE_PARQUET)
+    except Exception:
+        return df_hist
+    if df_live.empty:
+        return df_hist
+    df = pd.concat([df_hist, df_live], ignore_index=True)
+    df = df.drop_duplicates(subset=["GLOBALEVENTID"])
+    return df
+
+
 def load_best_data() -> pd.DataFrame:
     """
-    Live data quand elle contient des événements géolocalisés,
-    sinon historique 2025 (qui a 2101 points avec coordonnées).
-    Garantit que la carte a toujours des points à afficher.
+    Alias vers load_combined_data() — garantit toujours la vue la plus complète
+    (historique jan 2025 → hier + live du jour), dédupliquée.
+    Remplace l'ancienne logique 'live si coords sinon historique' qui retournait
+    un subset trop réduit quand benin_live.parquet ne contenait que quelques lignes.
     """
-    if LIVE_PARQUET.exists():
-        try:
-            live = pd.read_parquet(LIVE_PARQUET)
-            lat = live.get("ActionGeo_Lat", pd.Series(dtype=float))
-            if lat.notna().sum() > 0:
-                return live
-        except Exception:
-            pass
-    return load_historical_data()
+    return load_combined_data()

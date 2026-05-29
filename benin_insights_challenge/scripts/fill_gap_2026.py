@@ -163,6 +163,28 @@ def save_checkpoint(done: set):
 
 # ── Ecriture dans benin_enrichi.parquet ───────────────────────────────────────
 
+def _align_schema(df_combined: pd.DataFrame, df_existing: pd.DataFrame) -> pd.DataFrame:
+    """
+    Aligne les dtypes de df_combined sur ceux de df_existing pour eviter
+    les erreurs PyArrow lors de to_parquet (ex : int64 vs object).
+    Traite uniquement les colonnes numeriques (int/float).
+    """
+    for col, dtype in df_existing.dtypes.items():
+        if col not in df_combined.columns:
+            continue
+        if df_combined[col].dtype == dtype:
+            continue
+        try:
+            if pd.api.types.is_integer_dtype(dtype):
+                # Int64 = integer nullable (supporte les NaN)
+                df_combined[col] = pd.to_numeric(df_combined[col], errors="coerce").astype("Int64")
+            elif pd.api.types.is_float_dtype(dtype):
+                df_combined[col] = pd.to_numeric(df_combined[col], errors="coerce")
+        except Exception:
+            pass
+    return df_combined
+
+
 def append_to_enrichi(frames: list, existing_ids: set) -> int:
     """
     Enrichit et ajoute les DataFrames de 'frames' dans benin_enrichi.parquet.
@@ -191,11 +213,10 @@ def append_to_enrichi(frames: list, existing_ids: set) -> int:
     if ENRICHI.exists():
         df_existing = pd.read_parquet(ENRICHI)
         df_combined = pd.concat([df_existing, df_enriched], ignore_index=True)
+        # Harmoniser tous les types numeriques (int64/float64) pour PyArrow
+        df_combined = _align_schema(df_combined, df_existing)
     else:
         df_combined = df_enriched
-
-    # Harmoniser le type de GLOBALEVENTID (int64 dans l'existant, str dans les nouvelles lignes)
-    df_combined["GLOBALEVENTID"] = pd.to_numeric(df_combined["GLOBALEVENTID"], errors="coerce")
 
     df_combined.to_parquet(ENRICHI, index=False)
 
