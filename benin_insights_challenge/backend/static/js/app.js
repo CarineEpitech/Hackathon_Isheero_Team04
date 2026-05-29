@@ -53,9 +53,10 @@ createApp({
     }
 
     // ── CARTE LIVE ───────────────────────────────────────────────────────
-    const mapFilter = ref("all");
-    const mapLimit  = ref(500);
-    const mapHours  = ref(72);
+    const mapFilter       = ref("all");
+    const mapLimit        = ref(500);
+    const mapHours        = ref(72);
+    const excludeNigeria  = ref(false);
     const mapStatus = reactive({
       loading:       false,
       error:         null,
@@ -65,6 +66,7 @@ createApp({
       incidentCount: 0,
       lastUpdate:    null,
       windowInfo:    null,
+      idnPct:        null,
     });
 
     const MAP_HOURS_LABELS = {
@@ -81,20 +83,20 @@ createApp({
     function updateMapStatus(s) { Object.assign(mapStatus, s); }
 
     function loadLiveMap() {
-      TerroirMap.loadLiveMap(mapFilter.value, parseInt(mapLimit.value), mapHours.value);
+      TerroirMap.loadLiveMap(
+        mapFilter.value, parseInt(mapLimit.value), mapHours.value,
+        excludeNigeria.value
+      );
     }
 
-    function setMapFilter(f) {
-      mapFilter.value = f;
-      loadLiveMap();
-    }
-
-    function setMapHours(h) {
-      mapHours.value = h;
-      loadLiveMap();
-    }
-
+    function setMapFilter(f) { mapFilter.value = f; loadLiveMap(); }
+    function setMapHours(h)  { mapHours.value  = h; loadLiveMap(); }
     function refreshLiveMap() { loadLiveMap(); }
+
+    function toggleNigeria() {
+      excludeNigeria.value = !excludeNigeria.value;
+      loadLiveMap();
+    }
 
     // ── GDELT LIVE STATUS ────────────────────────────────────────────────
     const gdelt = reactive({
@@ -471,6 +473,7 @@ createApp({
       currentRoute, toastMessage,
       // Map
       mapFilter, mapLimit, mapHours, mapHoursLabel, mapStatus,
+      excludeNigeria, toggleNigeria,
       setMapFilter, setMapHours, loadLiveMap, refreshLiveMap,
       // GDELT
       gdelt, loadGdeltStatus, refreshGdelt, gdeltStatusClass, gdeltCoordLabel,

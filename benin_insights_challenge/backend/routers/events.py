@@ -56,12 +56,18 @@ def _row_to_event(row) -> dict:
     }
 
 
+def _is_nigeria_source(url: str) -> bool:
+    u = (url or "").lower()
+    return ".ng/" in u or ".ng\"" in u or "nigeria" in u or "naij.com" in u
+
+
 @router.get("/map")
 def events_map(
     security_only: bool = Query(False, description="Filtrer uniquement les événements sécuritaires"),
     limit: int = Query(500, ge=1, le=5000),
     adm1: Optional[str] = Query(None, description="Code département BN01-BN18"),
-    hours: Optional[int] = Query(None, ge=1, le=8760, description="Fenêtre temporelle en heures (relatif à la date max du jeu de données)"),
+    hours: Optional[int] = Query(None, ge=1, le=8760, description="Fenêtre temporelle en heures"),
+    exclude_nigeria: bool = Query(False, description="Exclure les sources médiatiques nigérianes (IDN)"),
 ):
     df = load_best_data()
 
@@ -82,17 +88,33 @@ def events_map(
         date_col = safe_column(df, "SQLDATE", None)
         if date_col is not None:
             try:
-                dt_col   = pd.to_datetime(date_col, errors="coerce")
-                max_dt   = dt_col.max()
+                dt_col    = pd.to_datetime(date_col, errors="coerce")
+                max_dt    = dt_col.max()
                 if pd.notna(max_dt):
                     cutoff_dt = max_dt - timedelta(hours=hours)
                     mask = mask & (dt_col >= cutoff_dt)
             except Exception:
                 pass
 
-    sub = df[mask].tail(limit)
+    # IDN : compter les sources nigérianes sur le sous-ensemble filtré (avant exclusion)
+    sub_all = df[mask]
+    url_col  = safe_column(sub_all, "SOURCEURL", "")
+    ng_mask  = url_col.apply(_is_nigeria_source)
+    n_total_pre = len(sub_all)
+    n_nigeria   = int(ng_mask.sum())
+    idn_pct = round(n_nigeria / n_total_pre * 100, 1) if n_total_pre else 0.0
+
+    if exclude_nigeria:
+        mask = mask & ~safe_column(df, "SOURCEURL", "").apply(_is_nigeria_source)
+
+    sub    = df[mask].tail(limit)
     events = [_row_to_event(row) for _, row in sub.iterrows()]
-    return {"count": len(events), "events": events}
+    return {
+        "count":   len(events),
+        "events":  events,
+        "idn_pct": idn_pct,
+        "nigeria_excluded": exclude_nigeria,
+    }
 
 
 @router.get("/security")

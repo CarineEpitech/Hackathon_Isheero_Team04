@@ -262,7 +262,7 @@ window.TerroirMap = (() => {
     _incidents = L.layerGroup().addTo(_map);
   }
 
-  async function loadLiveMap(filter, limit, hours) {
+  async function loadLiveMap(filter, limit, hours, excludeNigeria) {
     if (!_map) return;
     if (_onStatus) _onStatus({ loading: true, error: null, incidentError: null });
 
@@ -271,11 +271,12 @@ window.TerroirMap = (() => {
     const secOnly       = filter === "security";
     const hoursParam    = (hours != null) ? `&hours=${hours}` : "";
     const incHours      = (hours != null) ? Math.max(hours, 48) : 48;
+    const ngParam       = excludeNigeria ? "&exclude_nigeria=true" : "";
 
     try {
       const gdeltReq = showGdelt
-        ? apiGet(`/events/map?limit=${limit}${secOnly ? "&security_only=true" : ""}${hoursParam}`)
-        : Promise.resolve({ events: [], count: 0 });
+        ? apiGet(`/events/map?limit=${limit}${secOnly ? "&security_only=true" : ""}${hoursParam}${ngParam}`)
+        : Promise.resolve({ events: [], count: 0, idn_pct: null });
 
       const incReq = showIncidents
         ? apiGet(`/incidents?hours=${incHours}`)
@@ -293,6 +294,7 @@ window.TerroirMap = (() => {
         gdeltCount:    evData.count  ?? 0,
         securityCount: secCount,
         incidentCount: incData.count ?? 0,
+        idnPct:        evData.idn_pct ?? null,
         windowInfo,
         lastUpdate: new Date().toLocaleTimeString("fr-FR", {
           hour: "2-digit", minute: "2-digit",
