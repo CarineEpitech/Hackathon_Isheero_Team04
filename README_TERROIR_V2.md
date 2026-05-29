@@ -186,7 +186,7 @@ Au démarrage, le poller GDELT s'active automatiquement et commence à collecter
 GDELT mesure la couverture médiatique internationale, pas les événements réels. Un incident non couvert par la presse n'apparaît pas dans TERROIR. Inversement, un événement très médiatisé peut produire un score élevé sans correspondre à une menace concrète sur le terrain.
 
 **Géolocalisation approximative**
-Environ 91 % des événements GDELT sont localisés au centroïde du pays, faute de données géographiques précises dans les articles sources. La carte indique le niveau de précision de chaque point (position exacte, département estimé, ou pays approximatif).
+94,8 % des événements GDELT sont localisés au centroïde pays (coordonnée générique attribuée faute d'information géographique précise dans l'article source). Les 5,2 % restants sont géolocalisés au niveau d'une ville ou d'une zone spécifique. La carte indique le niveau de précision de chaque point (position exacte, département estimé, ou pays approximatif).
 
 **Sources nigérianes**
 22 % des articles proviennent de médias nigérians, ce qui peut amplifier la perception des zones frontalières. Le bouton IDN permet d'isoler cet effet.
