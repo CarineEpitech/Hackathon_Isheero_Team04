@@ -24,6 +24,7 @@ const DEPARTMENTS = [
 let _timelineRendered    = false;
 let _sttChartRendered    = false;
 let _gdeltStatusInterval = null;
+let _mapRefreshInterval  = null;   // rafraîchit incidents + marqueurs toutes les 60 s
 
 // ─────────────────────────────────────────────────────────────────────────
 createApp({
@@ -423,6 +424,8 @@ createApp({
         report.success = true;
         showToast("Signalement enregistré avec succès.", "success");
         loadRecentIncidents();
+        // Met à jour la carte en temps réel (incidents + GDELT)
+        loadLiveMap();
       } catch (err) {
         report.serverError = `Erreur lors de l'envoi : ${err.message}`;
       } finally {
@@ -445,17 +448,18 @@ createApp({
       if (route === "#/live") {
         nextTick(() => {
           TerroirMap.init(updateMapStatus);
-          if (!mapStatus.lastUpdate) {
-            loadLiveMap();
-          } else {
-            TerroirMap.invalidate();
-          }
+          // Toujours recharger les incidents quand on revient sur la carte
+          loadLiveMap();
           loadGdeltStatus();
           if (_gdeltStatusInterval) clearInterval(_gdeltStatusInterval);
           _gdeltStatusInterval = setInterval(loadGdeltStatus, 120000);
+          // Auto-refresh incidents toutes les 60 s pour tous les utilisateurs
+          if (_mapRefreshInterval) clearInterval(_mapRefreshInterval);
+          _mapRefreshInterval = setInterval(loadLiveMap, 60000);
         });
       } else {
         if (_gdeltStatusInterval) { clearInterval(_gdeltStatusInterval); _gdeltStatusInterval = null; }
+        if (_mapRefreshInterval)  { clearInterval(_mapRefreshInterval);  _mapRefreshInterval  = null; }
       }
       if (route === "#/terroir") {
         if (!stt.scores.length) loadStt();

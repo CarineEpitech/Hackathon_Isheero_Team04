@@ -4,7 +4,7 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Données générées localement (éphémères, recréées au démarrage)
-backend/data/incidents.db
+# incidents.db versionné pour initialiser le schéma sur Railway
 backend/data/incidents.json
 data/processed/benin_live.parquet
 data/processed/.gdelt_last_processed.txt
