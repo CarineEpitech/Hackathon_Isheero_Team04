@@ -23,8 +23,16 @@
   <nav class="navbar navbar-expand-lg terroir-navbar">
     <div class="container-fluid px-4">
 
-      <a class="navbar-brand terroir-brand" href="#/live">
+      <a class="navbar-brand terroir-brand d-flex align-items-center gap-2" href="#/live">
         <span class="brand-icon">T</span>ERROIR
+        <!-- Drapeau Bénin -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+             width="22" height="15" aria-label="Bénin"
+             style="border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.35);flex-shrink:0;vertical-align:middle">
+          <rect width="1" height="2" fill="#008751"/>
+          <rect x="1" width="2" height="1" fill="#FCD116"/>
+          <rect x="1" y="1" width="2" height="1" fill="#E8112D"/>
+        </svg>
       </a>
 
       <button class="navbar-toggler border-0" type="button"
@@ -418,14 +426,16 @@
         <div class="row g-3 mb-4">
           <div class="col-6 col-md-3">
             <div class="card kpi-card text-center p-3">
-              <div class="kpi-icon">🗺️</div>
+              <div class="kpi-icon text-secondary"><i class="bi bi-map-fill"></i></div>
               <div class="kpi-value">{{ stt.scores.length }}</div>
               <div class="kpi-label">Zones surveillées</div>
             </div>
           </div>
           <div class="col-6 col-md-3">
             <div class="card kpi-card text-center p-3" :class="sttAlertCount(2) > 0 ? 'kpi-danger' : ''">
-              <div class="kpi-icon">{{ sttAlertCount(2) > 0 ? '🔴' : '🟢' }}</div>
+              <div class="kpi-icon">
+                <i class="bi" :class="sttAlertCount(2) > 0 ? 'bi-exclamation-circle-fill text-danger' : 'bi-check-circle-fill text-success'"></i>
+              </div>
               <div class="kpi-value" :class="sttAlertCount(2) > 0 ? 'text-danger' : 'text-success'">
                 {{ sttAlertCount(2) || '—' }}
               </div>
@@ -434,14 +444,14 @@
           </div>
           <div class="col-6 col-md-3">
             <div class="card kpi-card text-center p-3">
-              <div class="kpi-icon">📊</div>
+              <div class="kpi-icon text-primary"><i class="bi bi-activity"></i></div>
               <div class="kpi-value">{{ stt.scores.reduce((s,d) => s + d.n_window, 0) }}</div>
               <div class="kpi-label">Événements 14 jours</div>
             </div>
           </div>
           <div class="col-6 col-md-3">
             <div class="card kpi-card text-center p-3">
-              <div class="kpi-icon">📍</div>
+              <div class="kpi-icon text-warning"><i class="bi bi-person-raised-hand"></i></div>
               <div class="kpi-value">
                 <span v-if="stt.incCount !== null">{{ stt.incCount }}</span>
                 <span v-else class="fs-5 text-muted">—</span>
