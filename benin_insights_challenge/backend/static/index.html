@@ -52,7 +52,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" :class="{ active: currentRoute === '#/analysis' }" href="#/analysis">
-              <i class="bi bi-bar-chart me-1"></i>Analyse 2025
+              <i class="bi bi-bar-chart me-1"></i>Analyse
             </a>
           </li>
         </ul>
@@ -248,7 +248,7 @@
       </div>
 
       <!-- Détails (collapse) -->
-      <div class="collapse show" id="gdelt-details">
+      <div class="collapse" id="gdelt-details">
         <div v-if="gdelt.data" class="row g-2 mb-2">
 
           <!-- Champs statut -->
@@ -427,7 +427,7 @@
         <!-- ── 2. Bannière zone la plus surveillée ────────────────── -->
         <div class="d-flex align-items-center mb-4 terroir-top-banner px-3 py-2 rounded"
              :class="sttTopAlert.level >= 2 ? 'banner-alerte' : sttTopAlert.level === 1 ? 'banner-precaution' : 'banner-normal'"
-             v-if="sttTopAlert">
+             v-if="sttTopAlert && sttTopAlert.level >= 1">
           <i class="bi bi-pin-map-fill me-3 fs-4 flex-shrink-0"></i>
           <div class="flex-grow-1">
             <strong>Zone la plus surveillée :</strong> {{ sttTopAlert.departement }}
@@ -483,7 +483,7 @@
                   <!-- Métriques courtes -->
                   <div class="row text-center g-0 border rounded p-1 mb-3">
                     <div class="col-4">
-                      <small class="d-block text-muted" style="font-size:.7rem">Évts 14j</small>
+                      <small class="d-block text-muted" style="font-size:.7rem">Sur 14j</small>
                       <strong class="fs-6">{{ dept.n_window }}</strong>
                     </div>
                     <div class="col-4 border-start border-end">
@@ -493,7 +493,7 @@
                       </strong>
                     </div>
                     <div class="col-4">
-                      <small class="d-block text-muted" style="font-size:.7rem">% sensible</small>
+                      <small class="d-block text-muted" style="font-size:.7rem">% conflictuel</small>
                       <strong class="fs-6">{{ Math.round(dept.neg_ratio_cur * 100) }}%</strong>
                     </div>
                   </div>
@@ -540,7 +540,6 @@
                   <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                       <h6 class="card-title fw-bold mb-0">{{ dept.departement }}</h6>
-                      <small class="text-muted">{{ dept.adm1_code }}</small>
                     </div>
                     <span class="badge" :class="levelBadgeClass(dept.level)">{{ dept.level_label }}</span>
                   </div>
@@ -555,7 +554,7 @@
                   </div>
                   <div class="row text-center g-0 mb-1">
                     <div class="col-6">
-                      <small class="d-block text-muted" style="font-size:.72rem">Évts 14j</small>
+                      <small class="d-block text-muted" style="font-size:.72rem">Sur 14j</small>
                       <strong class="fs-6">{{ dept.n_window }}</strong>
                     </div>
                     <div class="col-6">
@@ -564,12 +563,6 @@
                         {{ dept.tone_cur }}
                       </strong>
                     </div>
-                  </div>
-                  <div v-if="dept.level >= 1" class="stt-zscores">
-                    <small class="d-flex justify-content-between text-muted" style="font-size:.72rem">
-                      <span>CAMEO : <strong>{{ dept.z_cameo }}</strong></span>
-                      <span>Tone : <strong>{{ dept.z_tone }}</strong></span>
-                    </small>
                   </div>
                   <div v-if="dept.priority" class="mt-2 text-end">
                     <small class="badge bg-light text-secondary border">Zone prioritaire Nord</small>
@@ -927,7 +920,7 @@
                      class="recent-item">
                   <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
                     <div>
-                      <span class="badge bg-secondary me-1">{{ inc.type }}</span>
+                      <span class="badge bg-secondary me-1">{{ (inc.type || '').replace(/_/g, ' ') }}</span>
                       <strong class="small">
                         {{ inc.departement || inc.adm1_code || '—' }}
                       </strong>
@@ -1036,8 +1029,8 @@
     <div class="view-header">
       <div class="container-fluid px-4">
         <div class="py-3">
-          <h1 class="view-title mb-0">Analyse 2025</h1>
-          <small class="text-muted">Statistiques historiques — Dataset GDELT Bénin, janvier–décembre 2025</small>
+          <h1 class="view-title mb-0">Analyse historique</h1>
+          <small class="text-muted">Statistiques historiques — Dataset GDELT Bénin, janvier 2025 – avril 2026</small>
         </div>
       </div>
     </div>
@@ -1125,7 +1118,7 @@
         <div class="card shadow-sm mb-4">
           <div class="card-header bg-white fw-semibold py-3">
             <i class="bi bi-graph-up me-2 text-primary"></i>
-            Événements par jour — Bénin 2025
+            Événements par jour — Bénin 2025–2026
           </div>
           <div class="card-body p-3">
             <div v-if="timeline.loading" class="text-center py-4">
@@ -1166,10 +1159,9 @@
            class="text-muted text-decoration-none me-3">
           <i class="bi bi-code-slash me-1"></i>API Docs
         </a>
-        <a href="http://localhost:8501" target="_blank" rel="noopener"
-           class="text-muted text-decoration-none">
-          <i class="bi bi-graph-up-arrow me-1"></i>Streamlit
-        </a>
+        <span class="text-muted">
+          <i class="bi bi-graph-up-arrow me-1"></i>Streamlit (local uniquement)
+        </span>
       </small>
     </div>
   </footer>

@@ -55,7 +55,7 @@ createApp({
     // ── CARTE LIVE ───────────────────────────────────────────────────────
     const mapFilter = ref("all");
     const mapLimit  = ref(500);
-    const mapHours  = ref(24);
+    const mapHours  = ref(72);
     const mapStatus = reactive({
       loading:       false,
       error:         null,
@@ -224,7 +224,11 @@ createApp({
       _sttChartRendered = true;
     }
 
-    const sttTopAlert = computed(() => stt.scores.length ? stt.scores[0] : null);
+    const sttTopAlert = computed(() =>
+      stt.scores.length
+        ? [...stt.scores].sort((a, b) => b.stt - a.stt)[0]
+        : null
+    );
 
     function sttAlertCount(level) {
       return stt.scores.filter((s) => s.level === level).length;
