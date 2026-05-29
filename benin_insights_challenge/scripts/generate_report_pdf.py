@@ -121,6 +121,7 @@ ANCHORS = {
     9:  "disclosure",
     10: "limitations",
     11: "equipe",
+    12: "faq",
 }
 
 
@@ -236,6 +237,7 @@ def build_story():
         ("9.",  "Divulgation IA",                    ANCHORS[9]),
         ("10.", "Limitations et travaux futurs",     ANCHORS[10]),
         ("11.", "Equipe et stack technique",         ANCHORS[11]),
+        ("12.", "FAQ — Questions fréquentes",         ANCHORS[12]),
     ]
     for num, title, anchor in toc_entries:
         # Lien PDF interne cliquable vers l'ancre de la section
@@ -621,6 +623,117 @@ def build_story():
             col_widths=[5*cm, 11.5*cm],
         ),
         sp(8),
+    ]
+
+    # ── 12. FAQ ────────────────────────────────────────────────────────────────
+    story += [PageBreak()]
+    story += h1("12. FAQ — Questions fréquentes", 12)
+
+    faq = [
+        (
+            "1. Quel problème concret TERROIR cherche-t-il à résoudre ?",
+            "TERROIR répond au manque d'outils centralisés de veille territoriale et "
+            "sécuritaire au Bénin. La plateforme permet d'agréger, visualiser et analyser "
+            "en quasi temps réel les signaux de tensions provenant des médias internationaux "
+            "et des signalements citoyens.",
+            [],
+        ),
+        (
+            "2. Pourquoi avoir choisi les données GDELT comme principale source ?",
+            "GDELT fournit des flux mondiaux d'événements géopolitiques mis à jour toutes "
+            "les 15 minutes. Cela permet à TERROIR d'avoir une veille automatisée, continue "
+            "et exploitable à grande échelle.",
+            [],
+        ),
+        (
+            "3. Comment fonctionne le Score de Tension Territorial (STT) ?",
+            "Le STT est un indice composite qui combine :",
+            [
+                "la nature des événements (codes CAMEO conflictuels — poids 40 %),",
+                "la tonalité médiatique (AvgTone inversé — poids 35 %),",
+                "le volume d'événements normalisé sur 14 jours vs baseline 90 jours (poids 15 %),",
+                "la diversité des sources médiatiques (entropie de Shannon — poids 10 %).",
+            ],
+        ),
+        (
+            "4. Pourquoi le nord du Bénin est-il particulièrement surveillé ?",
+            "L'analyse des données GDELT montre que les départements du nord (Alibori, "
+            "Atacora, Borgou) sont peu couverts médiatiquement — moins de 4 % des articles "
+            "référencés — mais présentent des tonalités beaucoup plus négatives, liées aux "
+            "incidents sécuritaires et frontaliers. Ce paradoxe — peu visible mais très "
+            "négatif — justifie une surveillance renforcée.",
+            [],
+        ),
+        (
+            "5. Comment TERROIR valide-t-il les signalements citoyens ?",
+            "Les signalements citoyens sont automatiquement comparés aux événements GDELT "
+            "récents dans un rayon de 50 km et sur une fenêtre de 24 heures afin de "
+            "renforcer leur crédibilité. Un signalement ayant un événement GDELT "
+            "correspondant passe au statut validé automatiquement. Les signalements "
+            "non recoupés restent visibles avec la mention explicite « non vérifié ».",
+            [],
+        ),
+        (
+            "6. Les données affichées sont-elles réellement en temps réel ?",
+            "Oui. Le système interroge automatiquement les flux GDELT toutes les 15 minutes "
+            "et synchronise les incidents citoyens quasiment instantanément sur la plateforme. "
+            "Un indicateur de statut en interface affiche l'heure du dernier cycle GDELT "
+            "réussi (heure Bénin, WAT = UTC+1).",
+            [],
+        ),
+        (
+            "7. Comment TERROIR gère-t-il les biais médiatiques internationaux ?",
+            "Les médias nigérians représentent entre 15 et 20 % des événements concernant "
+            "le Bénin dans GDELT. TERROIR intègre un filtre spécifique (IDN%) permettant "
+            "d'isoler ou d'exclure ces sources en un clic, afin d'obtenir une lecture "
+            "centrée sur la couverture non nigériane du territoire béninois.",
+            [],
+        ),
+        (
+            "8. Pourquoi ne pas utiliser directement de l'intelligence artificielle prédictive ?",
+            "Le projet privilégie une approche explicable et opérationnelle. Les décisions "
+            "de sécurité nécessitent des indicateurs compréhensibles et auditables plutôt "
+            "qu'une boîte noire algorithmique difficile à interpréter. Le STT est entièrement "
+            "recalculable et justifiable statistiquement (z-scores sur fenêtres glissantes). "
+            "Des modèles prédictifs pourront être ajoutés en V2 une fois la base de données "
+            "terrain suffisamment volumineuse.",
+            [],
+        ),
+        (
+            "9. Qui sont les utilisateurs cibles de TERROIR ?",
+            "La plateforme vise principalement :",
+            [
+                "les ONG opérant dans les zones à risque du nord Bénin,",
+                "les préfectures et services de coordination sécuritaire départementaux,",
+                "les autorités sécuritaires locales,",
+                "les journalistes d'investigation couvrant le nord du pays,",
+                "les cellules de crise et les institutions publiques,",
+                "les citoyens souhaitant signaler un incident géolocalisé.",
+            ],
+        ),
+        (
+            "10. Quelle est la vision future du projet ?",
+            "À long terme, TERROIR ambitionne de devenir une infrastructure régionale "
+            "de veille territoriale pour l'Afrique de l'Ouest, avec :",
+            [
+                "des alertes push SMS/email déclenchées automatiquement sur franchissement de seuil,",
+                "une géolocalisation avancée par NLP (extraction des lieux dans le corps des articles),",
+                "l'intégration de médias locaux béninois non encore indexés par GDELT,",
+                "un accès sécurisé réservé aux autorités et organisations habilitées,",
+                "une extension au Burkina Faso, au Niger et aux pays voisins du Sahel.",
+            ],
+        ),
+    ]
+
+    for question, intro, items in faq:
+        story += h3(question)
+        story += [p(intro)]
+        if items:
+            story += bullet(items)
+        story += [sp(4)]
+
+    story += [
+        sp(6),
         hr(C_TEAL, 1),
         sp(4),
         p("Rapport généré automatiquement le " + TODAY + ". "
