@@ -55,8 +55,8 @@ createApp({
     // ── CARTE LIVE ───────────────────────────────────────────────────────
     const mapFilter       = ref("all");
     const mapLimit        = ref(500);
-    const mapHours        = ref(72);
-    const excludeNigeria  = ref(false);
+    const mapHours        = ref(720);   // défaut : 30 jours
+    const excludeNigeria  = ref(false); // défaut : Nigeria inclus
     const mapStatus = reactive({
       loading:       false,
       error:         null,

@@ -568,6 +568,38 @@ html, body {
   flex-shrink: 0;
 }
 
+/* ── Leaflet MarkerCluster custom ─────────────────────────────────── */
+.terroir-cluster {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  border-radius:   50%;
+  border:          2.5px solid white;
+  box-shadow:      0 2px 8px rgba(0,0,0,.35);
+  font-weight:     700;
+  font-size:       13px;
+  color:           white;
+  width:           36px;
+  height:          36px;
+  transition:      transform .15s ease;
+}
+.terroir-cluster:hover { transform: scale(1.15); }
+
+/* Petit cluster (2-4 points) : orange discret */
+.terroir-cluster.cluster-sm {
+  background: #e67e22;
+  width: 30px; height: 30px; font-size: 12px;
+}
+/* Cluster moyen (5-19 points) : rouge sécurité */
+.terroir-cluster.cluster-md {
+  background: #c0392b;
+}
+/* Grand cluster (20+ points) : rouge foncé critique */
+.terroir-cluster.cluster-lg {
+  background: #7b0d0d;
+  width: 42px; height: 42px; font-size: 14px;
+}
+
 /* ── Responsive ───────────────────────────────────────────────────── */
 @media (max-width: 576px) {
   .kpi-value    { font-size: 1.5rem; }

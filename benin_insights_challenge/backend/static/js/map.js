@@ -258,7 +258,25 @@ window.TerroirMap = (() => {
       maxZoom: 18,
     }).addTo(_map);
 
-    _gdelt     = L.layerGroup().addTo(_map);
+    // MarkerClusterGroup : regroupe les points proches en bulles numérotées.
+    // Zoom ≥ 9 → points individuels avec hover normal.
+    // Zoom < 9 → clusters cliquables qui zooment + spiderfient.
+    _gdelt = L.markerClusterGroup({
+      maxClusterRadius:        50,
+      disableClusteringAtZoom: 9,
+      spiderfyOnMaxZoom:       true,
+      showCoverageOnHover:     false,
+      zoomToBoundsOnClick:     true,
+      iconCreateFunction(cluster) {
+        const n   = cluster.getChildCount();
+        const cls = n >= 20 ? "cluster-lg" : n >= 5 ? "cluster-md" : "cluster-sm";
+        return L.divIcon({
+          html:      `<div class="terroir-cluster ${cls}">${n}</div>`,
+          className: "",
+          iconSize:  [36, 36],
+        });
+      },
+    }).addTo(_map);
     _incidents = L.layerGroup().addTo(_map);
   }
 
