@@ -1,0 +1,574 @@
+/* backend/static/css/style.css — TERROIR BeninScope */
+
+/* ── Variables ────────────────────────────────────────────────────── */
+:root {
+  --terroir-dark:   #1a3c34;
+  --terroir-mid:    #234d42;
+  --terroir-accent: #2d8a5f;
+  --bg-app:         #f0f2f5;
+  --navbar-h:       58px;
+  --c-normal:       #198754;
+  --c-precaution:   #ffc107;
+  --c-alerte:       #dc3545;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg-app);
+  color: #1a1a2e;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Navbar ───────────────────────────────────────────────────────── */
+.terroir-navbar {
+  background: var(--terroir-dark);
+  height: var(--navbar-h);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.terroir-brand {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff !important;
+}
+
+.brand-icon {
+  display: inline-block;
+  background: var(--terroir-accent);
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 900;
+  margin-right: 4px;
+}
+
+.navbar-nav .nav-link {
+  color: rgba(255,255,255,0.8) !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: #ffffff !important;
+  background: rgba(255,255,255,0.12);
+}
+
+.terroir-live-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #4caf50;
+  border-radius: 50%;
+  animation: pulse-live 1.6s infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* ── View container ───────────────────────────────────────────────── */
+.view-container {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.view-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e5ea;
+  flex-shrink: 0;
+}
+
+.view-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--terroir-dark);
+}
+
+/* ── Map ─────────────────────────────────────────────────────────── */
+.map-wrapper {
+  position: relative;
+  flex: 1 0 auto;
+}
+
+#terroir-map {
+  width: 100%;
+  height: 70vh;
+  min-height: 420px;
+  max-height: 780px;
+  background: #e8eef5;
+}
+
+/* ── Map filter strip ─────────────────────────────────────────────── */
+.map-limit-select {
+  width: auto;
+  min-width: 100px;
+}
+
+/* ── Map error overlay ────────────────────────────────────────────── */
+.map-error-overlay {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 600;
+  background: rgba(220, 53, 69, 0.93);
+  color: white;
+  border-radius: 20px;
+  padding: 6px 18px;
+  font-size: 0.82rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  white-space: nowrap;
+}
+
+/* ── Map legend ───────────────────────────────────────────────────── */
+.map-legend {
+  position: absolute;
+  bottom: 38px;
+  left: 12px;
+  z-index: 500;
+  background: rgba(255,255,255,0.97);
+  border: 1px solid #dee2e6;
+  min-width: 148px;
+  font-size: 0.8rem;
+}
+
+.legend-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.9;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-citizen {
+  background: #fd7e14;
+  border: 2px solid white;
+  box-shadow: 0 0 3px rgba(0,0,0,0.3);
+  width: 14px;
+  height: 14px;
+}
+
+/* ── Map stats bar ────────────────────────────────────────────────── */
+.map-stats-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  background: rgba(255,255,255,0.97);
+  border: 1px solid #dee2e6;
+  border-radius: 20px;
+  padding: 5px 18px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+
+/* ── Leaflet popup styling ────────────────────────────────────────── */
+.terroir-popup {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 0.82rem;
+  color: #1a1a2e;
+  min-width: 220px;
+}
+
+.pp-header {
+  padding: 6px 10px;
+  margin: -1px -1px 8px;
+  border-radius: 4px 4px 0 0;
+  font-weight: 600;
+  font-size: 0.83rem;
+  line-height: 1.4;
+}
+
+.pp-header-gdelt {
+  background: var(--terroir-dark);
+  color: white;
+}
+
+.pp-header-citizen {
+  background: #fd7e14;
+  color: white;
+}
+
+.pp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pp-table tr td {
+  padding: 2px 4px;
+  vertical-align: top;
+}
+
+.pp-label {
+  color: #888;
+  white-space: nowrap;
+  padding-right: 8px !important;
+  font-size: 0.77rem;
+}
+
+.pp-danger { color: #dc3545; font-weight: 600; }
+.pp-ok     { color: #198754; font-weight: 600; }
+.pp-pending{ color: #fd7e14; }
+
+.pp-badge-sec {
+  background: #dc3545;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.pp-badge-info {
+  background: #2980b9;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.pp-src {
+  margin-top: 6px;
+  border-top: 1px solid #eee;
+  padding-top: 4px;
+  font-size: 0.76rem;
+}
+
+.pp-src a { color: #2980b9; }
+
+/* ── Leaflet tooltip ──────────────────────────────────────────────── */
+.leaflet-tooltip.terroir-tooltip {
+  background: rgba(26, 60, 52, 0.95);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 9px;
+  font-size: 0.78rem;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  line-height: 1.5;
+}
+
+.leaflet-tooltip.terroir-tooltip::before {
+  border-top-color: rgba(26, 60, 52, 0.95);
+}
+
+/* ── STT cards ────────────────────────────────────────────────────── */
+.stt-card {
+  border: 1px solid #e2e5ea;
+  border-radius: 10px;
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+
+.stt-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.stt-card.stt-normal     { border-left: 4px solid var(--c-normal); }
+.stt-card.stt-precaution { border-left: 4px solid var(--c-precaution); }
+.stt-card.stt-alerte     { border-left: 4px solid var(--c-alerte); background: #fff8f8; }
+
+.stt-score-display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.stt-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stt-label { font-size: 0.85rem; }
+
+.stt-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: #e9ecef;
+}
+
+.stt-zscores {
+  border-top: 1px solid #f0f2f5;
+  padding-top: 6px;
+}
+
+/* ── KPI cards ────────────────────────────────────────────────────── */
+.kpi-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+}
+
+.kpi-card.kpi-danger { background: #fff5f5; }
+
+.kpi-icon { font-size: 1.8rem; margin-bottom: 6px; }
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #1a1a2e;
+}
+
+.kpi-label { font-size: 0.82rem; color: #6c757d; margin-top: 2px; }
+.kpi-sub   { font-size: 0.78rem; color: #6c757d; }
+
+/* ── Animations markers Live ──────────────────────────────────────── */
+
+/* Pulse discret pour les markers critiques (SVG path) */
+.marker-critical-pulse {
+  animation: pulse-critical 2.8s ease-in-out infinite;
+}
+
+@keyframes pulse-critical {
+  0%, 100% { opacity: 0.90; }
+  50%       { opacity: 0.28; }
+}
+
+/* Anneau de pulse pour les signalements citoyens récents */
+@keyframes citizen-pulse {
+  0%        { transform: scale(0.8); opacity: 0.7; }
+  70%       { transform: scale(1.8); opacity: 0;   }
+  100%      { transform: scale(0.8); opacity: 0;   }
+}
+
+/* ── Badge Nouveau dans les popups ────────────────────────────────── */
+.pp-badge-new {
+  background: #fd7e14;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+/* ── Bande contexte carte ─────────────────────────────────────────── */
+.map-context-bar {
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+/* ── TERROIR décisionnel ──────────────────────────────────────────── */
+.terroir-top-banner {
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+}
+
+.banner-alerte {
+  background: #fff5f5;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.banner-precaution {
+  background: #fffbea;
+  border-color: #ffeeba;
+  color: #856404;
+}
+
+.banner-normal {
+  background: #f0faf4;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.stt-decision {
+  border-left-width: 5px;
+}
+
+.trigger-phrase {
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 6px 10px;
+  line-height: 1.5;
+  font-size: 0.8rem;
+}
+
+.recommended-action {
+  background: rgba(41, 128, 185, 0.06);
+  border-left: 3px solid #2980b9;
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.playbook-level:last-child { border-bottom: none !important; }
+
+/* ── Report / Signalement ─────────────────────────────────────────── */
+.recent-item {
+  border-bottom: 1px solid #e9ecef;
+  padding: 8px 0;
+  font-size: 0.83rem;
+}
+
+.recent-item:last-child { border-bottom: none; }
+
+.report-desc {
+  font-size: 0.82rem;
+  color: #495057;
+  line-height: 1.5;
+}
+
+/* ── GDELT Status Panel ───────────────────────────────────────────── */
+.gdelt-status-panel {
+  border-top: 1px solid #e2e5ea;
+  background: #fafbfc;
+  font-size: 0.82rem;
+}
+
+/* Dot d'état */
+.gdelt-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.gdelt-dot-ok {
+  background: #198754;
+  box-shadow: 0 0 0 3px rgba(25,135,84,.15);
+  animation: gdelt-pulse-ok 2.5s ease-in-out infinite;
+}
+.gdelt-dot-error    { background: #dc3545; }
+.gdelt-dot-checking { background: #ffc107; animation: gdelt-blink .9s ease-in-out infinite; }
+.gdelt-dot-pending  { background: #adb5bd; }
+
+@keyframes gdelt-pulse-ok {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(25,135,84,.15); }
+  50%       { box-shadow: 0 0 0 6px rgba(25,135,84,.05); }
+}
+@keyframes gdelt-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .35; }
+}
+
+/* Cellules stats */
+.gdelt-stat-cell {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 5px 8px;
+  text-align: center;
+}
+.gdelt-stat-label {
+  font-size: 0.70rem;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gdelt-stat-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Message résumé inline */
+.gdelt-message-inline {
+  max-width: 480px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Qualité coordonnées */
+.gdelt-coord-quality { font-size: 0.78rem; }
+.gdelt-coord-item    { display: flex; align-items: center; gap: 5px; }
+.gdelt-coord-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Popup coord precision badges ────────────────────────────────── */
+.pp-coord-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  vertical-align: middle;
+  color: #fff;
+}
+
+.pp-coord-exact   { background: #198754; }
+.pp-coord-actor   { background: #2980b9; }
+.pp-coord-dept    { background: #e67e22; }
+.pp-coord-country { background: #adb5bd; color: #343a40; }
+
+.pp-coord-note {
+  font-size: 0.73rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 3px;
+  line-height: 1.4;
+}
+
+/* ── Footer ───────────────────────────────────────────────────────── */
+.terroir-footer {
+  background: #ffffff;
+  border-top: 1px solid #e2e5ea;
+  flex-shrink: 0;
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 576px) {
+  .kpi-value    { font-size: 1.5rem; }
+  .stt-number   { font-size: 1.6rem; }
+  .map-stats-bar{ font-size: 0.72rem; padding: 4px 12px; }
+  #terroir-map  { height: 55vh; }
+}

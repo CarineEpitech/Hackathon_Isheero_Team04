@@ -2,3 +2,14 @@
 .venv/
 __pycache__/
 .ipynb_checkpoints/
+
+# Données générées localement (éphémères, recréées au démarrage)
+backend/data/incidents.db
+backend/data/incidents.json
+data/processed/benin_live.parquet
+data/processed/.gdelt_last_processed.txt
+
+# Fichiers lourds / secrets locaux
+*.pkl
+*.log
+.env

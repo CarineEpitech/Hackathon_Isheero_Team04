@@ -17,5 +17,13 @@ matplotlib>=3.7.0 # Graphiques statiques, matrice de confusion
 seaborn>=0.12.0 # Heatmaps, distributions, corrélations
 
 # ── Utilitaires ───────────────────────────────────────────
+requests>=2.31.0   # Collecteur GDELT temps réel (backend/services)
+truststore>=0.10.0 # Certificats système Windows (fix SSL GDELT)
+
+# ── Web app FastAPI ────────────────────────────────────────
+fastapi>=0.100.0   # Framework API REST + serveur de fichiers statiques
+uvicorn>=0.20.0    # Serveur ASGI (déjà présent via Streamlit)
+aiofiles>=23.0.0   # Servir les fichiers statiques de manière asynchrone
+# jinja2 et python-multipart déjà installés via Streamlit
 tqdm>=4.65.0 # Barres de progression (01_pipeline_gdelt)
 kaleido==0.2.1 # Export des figures Plotly en PNG (carte pitch)
