@@ -232,7 +232,7 @@
           &nbsp;&bull;&nbsp;
           <strong style="color:#fd7e14">{{ mapStatus.incidentCount }}</strong> signalements terrain
           &nbsp;&bull;&nbsp;
-          <span class="text-muted">{{ mapStatus.lastUpdate }}</span>
+          <strong>{{ mapStatus.lastUpdate }}</strong><span class="text-muted ms-1">GMT+1</span>
         </template>
       </div>
 
@@ -251,8 +251,19 @@
           <i class="bi bi-chevron-down text-secondary" style="font-size:.75rem"></i>
         </div>
         <div class="d-flex align-items-center gap-3">
-          <small class="text-muted gdelt-message-inline" v-if="gdelt.data">
-            {{ gdelt.data.message }}
+          <small class="text-muted" v-if="gdelt.data">
+            <span class="me-2">
+              Base live :
+              <strong :class="gdelt.data.live_total_events > 0 ? 'text-primary' : 'text-muted'">
+                {{ gdelt.data.live_total_events.toLocaleString('fr-FR') }}
+              </strong> événements
+            </span>
+            <span class="text-muted" style="font-size:.78rem">
+              · Dernier cycle :
+              <strong :class="gdelt.data.benin_events_added > 0 ? 'text-success' : 'text-muted'">
+                {{ gdelt.data.benin_events_added > 0 ? '+' + gdelt.data.benin_events_added : gdelt.data.benin_events_found + ' trouvés' }}
+              </strong>
+            </span>
           </small>
           <small class="text-muted" v-else-if="gdelt.loading">
             <span class="spinner-border spinner-border-sm" style="width:.7rem;height:.7rem"></span>
@@ -1199,9 +1210,6 @@
            class="text-muted text-decoration-none me-3">
           <i class="bi bi-code-slash me-1"></i>API Docs
         </a>
-        <span class="text-muted">
-          <i class="bi bi-graph-up-arrow me-1"></i>Streamlit (local uniquement)
-        </span>
       </small>
     </div>
   </footer>
