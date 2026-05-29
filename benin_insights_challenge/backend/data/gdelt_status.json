@@ -1,12 +1,12 @@
 {
   "status": "ok",
-  "last_checked_at": "2026-05-29T04:32:12",
-  "last_processed_file": "20260529033000",
-  "last_gdelt_url": "http://data.gdeltproject.org/gdeltv2/20260529033000.export.CSV.zip",
-  "world_events_read": 853,
+  "last_checked_at": "2026-05-29T07:20:17",
+  "last_processed_file": "20260529063000",
+  "last_gdelt_url": "http://data.gdeltproject.org/gdeltv2/20260529063000.export.CSV.zip",
+  "world_events_read": 652,
   "benin_events_found": 0,
   "benin_events_added": 0,
   "live_total_events": 18,
   "last_error": null,
-  "message": "Dernière vérification réussie. Aucun événement Bénin dans ce fichier (853 événements mondiaux lus)."
+  "message": "Dernière vérification réussie. Aucun événement Bénin dans ce fichier (652 événements mondiaux lus)."
 }

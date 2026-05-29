@@ -97,13 +97,23 @@ def charger_donnees_historiques():
 
 @st.cache_data(ttl=900)
 def charger_donnees_live():
-    """Charge benin_live.parquet (poller GDELT 15 min), fallback sur historique."""
-    df_live = load_live_events()
-    if not df_live.empty:
-        df_live["SQLDATE"] = pd.to_datetime(df_live["SQLDATE"], errors="coerce")
-        return df_live, f"benin_live.parquet ({len(df_live)} évts)"
-    df = charger_donnees_historiques()
-    return df, "dataset_historique_2025.parquet"
+    """
+    Retourne les données combinées (benin_enrichi + benin_live) filtrées
+    sur les 30 derniers jours — source unique pour la carte et les métriques live.
+    Fallback sur le dataset historique complet si la fenêtre est vide.
+    """
+    sys.path.insert(0, str(ROOT_DIR / "backend" / "services"))
+    from data_loader import load_combined_data
+    df = load_combined_data()
+    if df.empty:
+        df_h = charger_donnees_historiques()
+        return df_h, "historique (fallback)"
+    df["SQLDATE"] = pd.to_datetime(df["SQLDATE"], errors="coerce")
+    cutoff = pd.Timestamp.now().normalize() - pd.Timedelta(days=30)
+    df_30 = df[df["SQLDATE"] >= cutoff].copy()
+    if df_30.empty:
+        return df, f"combiné complet ({len(df):,} évts)"
+    return df_30, f"combiné 30j ({len(df_30):,} évts)"
 
 
 def charger_incidents():
@@ -117,10 +127,12 @@ def charger_incidents():
 def charger_stt():
     try:
         from metrics import compute_all_departments
-        df = charger_donnees_historiques()
+        from data_loader import load_combined_data
+        df = load_combined_data()
         if df.empty:
             return []
-        ref = pd.Timestamp(df["SQLDATE"].max())
+        df["SQLDATE"] = pd.to_datetime(df["SQLDATE"], errors="coerce")
+        ref = pd.Timestamp.now()   # ancrage sur aujourd'hui, pas sur max(SQLDATE)
         return compute_all_departments(df, ref_date=ref)
     except Exception as e:
         st.warning(f"Calcul STT indisponible : {e}")
@@ -239,8 +251,9 @@ with tab_live:
     df_sec = df_sec.dropna(subset=["ActionGeo_Lat", "ActionGeo_Long"])
     df_sec = df_sec[
         (df_sec["ActionGeo_Lat"].between(*BENIN_LAT)) &
-        (df_sec["ActionGeo_Long"].between(*BENIN_LON)) &
-        (df_sec["ActionGeo_ADM1Code"] != "BN")
+        (df_sec["ActionGeo_Long"].between(*BENIN_LON))
+        # ADM1 != "BN" retiré : _apply_coord_priority a déjà appliqué un jitter
+        # aux centroïdes génériques, ils restent donc utiles sur la carte.
     ]
 
     col_m1, col_m2, col_m3 = st.columns(3)
@@ -287,8 +300,8 @@ with tab_live:
         fig_live.update_layout(height=540, margin={"r": 0, "l": 0, "t": 40, "b": 0})
         st.plotly_chart(fig_live, width='stretch')
         st.caption(
-            "Rouge = ton négatif (GDELT) · Points orange = signalements citoyens non vérifiés · "
-            "ADM1=BN (centroïde générique) exclu · Bénin uniquement"
+            "Rouge = ton négatif (GDELT) · Points orange = signalements citoyens · "
+            "Coordonnées issues de GDELT + jitter centroïde · Bénin uniquement"
         )
     else:
         st.info(
