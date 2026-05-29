@@ -13,3 +13,15 @@ data/processed/.gdelt_last_processed.txt
 *.pkl
 *.log
 .env
+
+# Données intermédiaires pipeline (recréées par Pipeline.py)
+data/processed/benin_clean.csv
+data/processed/benin_enrichi.csv
+data/processed/benin_features.csv
+
+# Scripts locaux avec chemins absolus (outils de génération de docs, non portables)
+scripts/patch_terroir_v4.py
+scripts/create_outputs_v4.py
+scripts/create_deck_v5.py
+scripts/create_deck_jury.py
+scripts/md_to_docx.py
