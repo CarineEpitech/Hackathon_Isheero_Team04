@@ -61,18 +61,11 @@
   from { width: 0%; }
   to   { width: 100%; }
 }
-/* Logo — apparaît en dernier avec fondu après 2.5 s */
+/* Logo — visible dès le début */
 .splash-logo {
   display: flex;
   align-items: center;
   gap: clamp(10px, 2.5vw, 18px);
-  opacity: 0;
-  animation: splash-logo-in 0.7s ease forwards;
-  animation-delay: 2.5s;
-}
-@keyframes splash-logo-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0);   }
 }
 .splash-brand-icon {
   display: inline-flex;
