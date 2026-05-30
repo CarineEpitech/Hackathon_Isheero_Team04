@@ -69,7 +69,10 @@ def load_all(validated_only: bool = False) -> pd.DataFrame:
     with sqlite3.connect(DB_PATH) as conn:
         df = pd.read_sql_query(query, conn)
     if not df.empty:
-        df["timestamp"] = pd.to_datetime(df["timestamp"])
+        # utc=True → timestamps toujours timezone-aware UTC ;
+        # tz_convert(None) retire le tzinfo pour rester en naive UTC.
+        # Cela évite TypeError lors des comparaisons (aware vs naive).
+        df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True).dt.tz_convert(None)
     return df
 
 
@@ -78,7 +81,9 @@ def load_recent(hours: int = 48) -> pd.DataFrame:
     df = load_all()
     if df.empty:
         return df
-    cutoff = pd.Timestamp.utcnow().tz_localize(None) - pd.Timedelta(hours=hours)
+    # datetime.utcnow() retourne un naive UTC — compatible avec les timestamps
+    # stockés en naive UTC (après tz_convert dans load_all).
+    cutoff = pd.Timestamp(datetime.utcnow()) - pd.Timedelta(hours=hours)
     return df[df["timestamp"] >= cutoff]
 
 
