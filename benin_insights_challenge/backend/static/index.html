@@ -23,36 +23,18 @@
 <!-- ── SPLASH SCREEN ─────────────────────────────────────────────────────── -->
 <div id="terroir-splash" aria-hidden="true">
   <div class="splash-inner">
+    <p class="splash-tagline">TERROIR surveille, en temps réel.</p>
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+    <!-- Logo apparaît en dernier, après 2.5 s -->
     <div class="splash-logo">
       <span class="splash-brand-icon">T</span><span class="splash-brand-text">ERROIR</span>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
-           width="28" height="19" aria-label="Bénin" class="splash-flag">
+           width="34" height="23" aria-label="Bénin" class="splash-flag">
         <rect width="1" height="2" fill="#008751"/>
         <rect x="1" width="2" height="1" fill="#FCD116"/>
         <rect x="1" y="1" width="2" height="1" fill="#E8112D"/>
       </svg>
     </div>
-    <p class="splash-tagline">TERROIR surveille, en temps réel.</p>
-    <!-- Drapeau Bénin animé comme barre de progression -->
-    <svg class="splash-flag-progress" viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg"
-         role="img" aria-label="Chargement">
-      <defs>
-        <clipPath id="flag-fill">
-          <rect x="0" y="0" height="2" width="0">
-            <animate attributeName="width" from="0" to="3"
-                     dur="4.5s" fill="freeze" begin="0s"/>
-          </rect>
-        </clipPath>
-      </defs>
-      <!-- Fond fantôme (contour du drapeau) -->
-      <rect width="3" height="2" fill="rgba(255,255,255,0.07)" rx="0.04"/>
-      <!-- Drapeau qui se révèle de gauche à droite -->
-      <g clip-path="url(#flag-fill)">
-        <rect x="0" width="1"  height="2" fill="#008751"/>
-        <rect x="1" width="2" height="1"  fill="#FCD116"/>
-        <rect x="1" y="1" width="2" height="1" fill="#E8112D"/>
-      </g>
-    </svg>
   </div>
 </div>
 
