@@ -20,6 +20,23 @@
 </head>
 <body>
 
+<!-- ── SPLASH SCREEN ─────────────────────────────────────────────────────── -->
+<div id="terroir-splash" aria-hidden="true">
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <span class="splash-brand-icon">T</span><span class="splash-brand-text">ERROIR</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2"
+           width="28" height="19" aria-label="Bénin" class="splash-flag">
+        <rect width="1" height="2" fill="#008751"/>
+        <rect x="1" width="2" height="1" fill="#FCD116"/>
+        <rect x="1" y="1" width="2" height="1" fill="#E8112D"/>
+      </svg>
+    </div>
+    <p class="splash-tagline">TERROIR surveille, en temps réel.</p>
+    <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+  </div>
+</div>
+
 <div id="app">
 
   <!-- ── NAVBAR ─────────────────────────────────────────────────────── -->
@@ -1250,6 +1267,20 @@
 <script src="/static/js/api.js"></script>
 <script src="/static/js/map.js"></script>
 <script src="/static/js/app.js"></script>
+
+<!-- ── Splash : masquage après 3 s ───────────────────────────────── -->
+<script>
+  (function () {
+    var splash = document.getElementById("terroir-splash");
+    if (!splash) return;
+    // Masque après 3 000 ms avec transition CSS de 600 ms
+    setTimeout(function () {
+      splash.classList.add("splash-hidden");
+      // Supprime du DOM après la transition pour ne pas bloquer les clics
+      setTimeout(function () { splash.remove(); }, 650);
+    }, 3000);
+  })();
+</script>
 
 </body>
 </html>
