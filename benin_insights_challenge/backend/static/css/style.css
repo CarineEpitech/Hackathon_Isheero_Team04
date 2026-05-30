@@ -72,23 +72,11 @@
   letter-spacing: 0.02em;
   margin: 0;
 }
-.splash-bar {
-  width: clamp(120px, 40vw, 220px);
-  height: 3px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.splash-bar-fill {
-  height: 100%;
-  width: 0%;
-  background: #1abc9c;
-  border-radius: 2px;
-  animation: splash-progress 3s linear forwards;
-}
-@keyframes splash-progress {
-  from { width: 0%; }
-  to   { width: 100%; }
+.splash-flag-progress {
+  width: clamp(120px, 38vw, 210px);
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.35);
 }
 
 /* ── Base ─────────────────────────────────────────────────────────── */

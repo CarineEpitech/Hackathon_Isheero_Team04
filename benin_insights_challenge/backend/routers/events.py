@@ -69,7 +69,12 @@ def events_map(
     hours: Optional[int] = Query(None, ge=1, le=8760, description="Fenêtre temporelle en heures"),
     exclude_nigeria: bool = Query(False, description="Exclure les sources médiatiques nigérianes (IDN)"),
 ):
-    df = load_combined_data()
+    try:
+        df = load_combined_data()
+    except Exception as exc:
+        import logging
+        logging.getLogger("terroir.events").error(f"load_combined_data() failed: {exc}")
+        return {"count": 0, "events": [], "idn_pct": 0.0, "nigeria_excluded": exclude_nigeria, "error": str(exc)}
 
     lat_col = safe_column(df, "ActionGeo_Lat", None)
     lon_col = safe_column(df, "ActionGeo_Long", None)
