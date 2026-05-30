@@ -55,7 +55,7 @@
   width: 0%;
   background: #1abc9c;
   border-radius: 2px;
-  animation: splash-progress 4.5s linear forwards;
+  animation: splash-progress 10s linear forwards;
 }
 @keyframes splash-progress {
   from { width: 0%; }
